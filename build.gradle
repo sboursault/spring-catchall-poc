@@ -1,0 +1,14 @@
+
+apply from: "gradle/dependencies.gradle"
+
+allprojects {
+	group 'poc.arkham'
+}
+
+subprojects {
+
+	repositories {
+		mavenCentral()
+	}
+
+}

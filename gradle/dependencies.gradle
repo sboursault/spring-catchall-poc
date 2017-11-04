@@ -1,0 +1,7 @@
+ext {
+    versions = [
+        springBoot : "1.5.4.RELEASE",
+        mapstruct  : "1.2.0.CR2",
+        swagger :    "2.7.0"
+    ]
+}
