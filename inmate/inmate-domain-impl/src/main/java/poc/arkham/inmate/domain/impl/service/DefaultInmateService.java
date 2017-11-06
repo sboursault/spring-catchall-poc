@@ -2,14 +2,13 @@ package poc.arkham.inmate.domain.impl.service;
 
 import poc.arkham.inmate.domain.exception.InmateNotFoundException;
 import poc.arkham.inmate.domain.exception.InvalidStateException;
+import poc.arkham.inmate.domain.model.Errors;
 import poc.arkham.inmate.domain.model.Inmate;
 import poc.arkham.inmate.domain.impl.repository.InmateRepository;
 import poc.arkham.inmate.domain.service.InmateService;
-import poc.arkham.inmate.domain.workflow.InmateValidator;
+import poc.arkham.inmate.domain.impl.workflow.InmateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.Errors;
 
 import java.util.List;
 
@@ -35,8 +34,9 @@ class DefaultInmateService implements InmateService {
     }
 
     public Inmate register(Inmate inmate) throws InvalidStateException {
-        Errors errors = new BeanPropertyBindingResult(inmate, Inmate.class.getTypeName());
-        if (!inmateValidator.isValidForLockup(inmate, errors))
+        Errors errors = Errors.noError();
+        inmateValidator.isValidForLockup(inmate, errors);
+        if (errors.hasErrors())
             throw new InvalidStateException(errors);
         return inmateRepository.save(inmate);
     }

@@ -1,6 +1,6 @@
 package poc.arkham.inmate.api.controller;
 
-import poc.arkham.inmate.api.config.ApplicationProperties;
+import poc.arkham.common.config.ApplicationProperties;
 import poc.arkham.inmate.domain.exception.InmateNotFoundException;
 import org.springframework.hateoas.core.AnnotationMappingDiscoverer;
 import org.springframework.hateoas.core.DummyInvocationUtils;
@@ -9,7 +9,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static poc.arkham.inmate.api.config.ApplicationContextProvider.getApplicationContext;
+import static poc.arkham.common.config.ApplicationContextProvider.getApplicationContext;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 /**

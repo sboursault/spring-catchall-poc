@@ -1,8 +1,8 @@
 package poc.arkham.inmate.api.controller;
 
-import poc.arkham.inmate.api.controller.mapper.InmateMapper;
-import poc.arkham.inmate.api.controller.resource.InmateResource;
-import poc.arkham.inmate.api.controller.resource.InmatesResource;
+import poc.arkham.inmate.api.mapper.InmateMapper;
+import poc.arkham.inmate.api.resource.InmateResource;
+import poc.arkham.inmate.api.resource.InmatesResource;
 import poc.arkham.inmate.domain.exception.InmateNotFoundException;
 import poc.arkham.inmate.domain.exception.InvalidStateException;
 import poc.arkham.inmate.domain.model.Inmate;
@@ -11,16 +11,15 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static poc.arkham.inmate.domain.util.ValidationUtils.validate;
-import static poc.arkham.inmate.domain.util.ValidationUtils.validateNotNull;
-import static poc.arkham.inmate.domain.util.ValidationUtils.validateNull;
+import static poc.arkham.common.util.RestPreconditions.validate;
+import static poc.arkham.common.util.RestPreconditions.validateNotNull;
+import static poc.arkham.common.util.RestPreconditions.validateNull;
 
 /**
  * <p>A simple rest controller to expose inmates.</p>
@@ -44,9 +43,9 @@ public class InmateRestController {
     }
 
     @PostMapping
-    public ResponseEntity<InmateResource> create(@RequestBody InmateResource input, Errors errors) throws InvalidStateException {
+    public ResponseEntity<InmateResource> create(@RequestBody InmateResource input) throws InvalidStateException {
         Inmate entity = convertToModel(input);
-        validateNull(entity.getId(), "id", errors);
+        validateNull(entity.getId(), "id");
         Inmate persisted = inmateService.register(entity);
         InmateResource response = convertToResource(persisted);
         return ResponseEntity
@@ -55,15 +54,15 @@ public class InmateRestController {
     }
 
     @PutMapping("/{id}")
-    public InmateResource update(@PathVariable("id") String id, @RequestBody InmateResource input, Errors errors) throws InvalidStateException, InmateNotFoundException {
+    public InmateResource update(@PathVariable("id") String id, @RequestBody InmateResource input) throws InvalidStateException, InmateNotFoundException {
         //FIXME: a creation date would be erased.
         Inmate entity = convertToModel(input);
         if (StringUtils.isEmpty(entity.getId())) {
             entity.setId(id);
         } else {
-            validate(Objects.equals(id, entity.getId()), "id", "inconsistant ids between the url and the payload", errors);
+            validate(Objects.equals(id, entity.getId()), "inconsistant ids between the url and the payload");
         }
-        validateNotNull(entity.getId(), "id", errors);
+        validateNotNull(entity.getId(), "id");
         validateInmateExists(id); // TODO: could be in the service
         Inmate persisted = inmateService.register(entity);
         return convertToResource(persisted);

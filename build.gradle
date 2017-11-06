@@ -1,6 +1,8 @@
 
 apply from: "gradle/dependencies.gradle"
 
+defaultTasks 'clean', 'build'
+
 allprojects {
 	group 'poc.arkham'
 }

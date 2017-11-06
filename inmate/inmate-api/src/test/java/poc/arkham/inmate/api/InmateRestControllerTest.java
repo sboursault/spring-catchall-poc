@@ -249,7 +249,7 @@ public class InmateRestControllerTest extends AbstractRestControllerTest {
                                 "\"lastname\": \"unknown\"}"))
                 .andDo(print())
                 .andExpect(
-                        status().isUnprocessableEntity())
+                        status().isBadRequest())
                 .andExpect(
                         jsonPath("$.messages", containsInAnyOrder(
                                 "inconsistant ids between the url and the payload")));

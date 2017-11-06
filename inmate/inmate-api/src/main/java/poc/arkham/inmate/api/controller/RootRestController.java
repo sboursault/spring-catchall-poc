@@ -1,6 +1,6 @@
 package poc.arkham.inmate.api.controller;
 
-import poc.arkham.inmate.api.controller.resource.RootResource;
+import poc.arkham.inmate.api.resource.RootResource;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.web.bind.annotation.*;
 

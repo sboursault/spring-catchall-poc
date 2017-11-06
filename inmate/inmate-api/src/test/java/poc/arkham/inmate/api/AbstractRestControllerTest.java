@@ -12,6 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import poc.arkham.inmate.api.config.InmateApiApplication;
+
 import java.nio.charset.Charset;
 
 import static org.springframework.http.HttpHeaders.CONTENT_LENGTH;
@@ -20,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes= { AsylumApplication.class })
+@SpringBootTest(classes= { InmateApiApplication.class })
 @WebAppConfiguration
 @ActiveProfiles("test")
 @AutoConfigureMockMvc

@@ -1,7 +1,8 @@
 
-
 rootProject.name = 'arkham'
 
+include ':common:web-analytics'
+include ':common:web-common'
 include ':inmate:inmate-domain'
 include ':inmate:inmate-domain-impl'
 include ':inmate:inmate-api'
