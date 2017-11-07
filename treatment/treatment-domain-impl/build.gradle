@@ -1,0 +1,20 @@
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${versions.springBoot}")
+	}
+}
+
+apply plugin: "java"
+apply plugin: "org.springframework.boot"
+
+bootRepackage.enabled = false
+
+dependencies {
+	compile project(':treatment:treatment-domain')
+	compile("org.springframework.boot:spring-boot-starter-data-mongodb")
+	compileOnly("org.projectlombok:lombok")
+}
