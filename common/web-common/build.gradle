@@ -18,6 +18,15 @@ bootRepackage.enabled = false
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-hateoas"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" // allows @JsonFormat definitions
+
+    // swagger
     compile "io.springfox:springfox-swagger2:${versions.swagger}"
     compile "io.springfox:springfox-swagger-ui:${versions.swagger}"
+
+    // tracing
+    // see also : org.springframework.cloud:spring-cloud-starter-zipkin
+    compile "io.opentracing.contrib:opentracing-spring-web-autoconfigure:0.0.4"
+    compile "io.zipkin.reporter:zipkin-sender-okhttp3:0.10.0"
+    compile "io.opentracing.brave:brave-opentracing:0.20.0"
 }

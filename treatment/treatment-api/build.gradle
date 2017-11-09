@@ -23,8 +23,6 @@ dependencies {
 	compile project(':treatment:treatment-domain')
 	compile project(':common:web-common')
 
-	compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" // allows @JsonFormat definitions
-
 	//compile "org.springframework.data:spring-data-rest-hal-browser"
 	//compile "org.springframework.boot:spring-boot-devtools"
 

@@ -3,6 +3,9 @@
 # building the jar could be in staged docker,
 # but it would not reuse the local gradle repository.
 
+# stop bash on error
+set -e
+
 USAGE="$(basename "$0") [-h] [-m <message>] [SERVICE...] -- program to launch the asylum environment.
 where:
     SERVICE... Are the docker services to restart.

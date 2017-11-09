@@ -33,6 +33,10 @@ services:
   db:
     image: "mongo:3.0"
     command: --smallfiles
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+    - "9411:9411"
   redis:
     image: "redis:4.0"
     ports:
