@@ -1,16 +1,18 @@
 package poc.arkham.treatment.domain.impl.service;
 
-import poc.arkham.treatment.domain.exception.InmateNotFoundException;
-import poc.arkham.treatment.domain.model.Inmate;
-import poc.arkham.treatment.domain.service.InmateService;
-import poc.arkham.treatment.domain.exception.InvalidStateException;
-import poc.arkham.treatment.domain.model.Errors;
-import poc.arkham.treatment.domain.impl.repository.InmateRepository;
-import poc.arkham.treatment.domain.impl.workflow.InmateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+import poc.arkham.treatment.domain.exception.InmateNotFoundException;
+import poc.arkham.treatment.domain.exception.InvalidStateException;
+import poc.arkham.treatment.domain.impl.repository.InmateRepository;
+import poc.arkham.treatment.domain.impl.workflow.InmateValidator;
+import poc.arkham.treatment.domain.model.Inmate;
+import poc.arkham.treatment.domain.service.InmateService;
 
 import java.util.List;
+
+import static poc.arkham.treatment.domain.model.InmateTransition.REGISTRATION;
 
 @Component
 class DefaultInmateService implements InmateService {
@@ -22,11 +24,11 @@ class DefaultInmateService implements InmateService {
     private InmateRepository inmateRepository;
 
     public Inmate findById(String id) throws InmateNotFoundException {
-        Inmate inmate = inmateRepository.findOne(id);
-        if (inmate == null) {
+        Inmate entity = inmateRepository.findOne(id);
+        if (entity == null) {
             throw new InmateNotFoundException(id);
         }
-        return inmate;
+        return entity;
     }
 
     public List<Inmate> findAll() {
@@ -34,10 +36,11 @@ class DefaultInmateService implements InmateService {
     }
 
     public Inmate register(Inmate inmate) throws InvalidStateException {
-        Errors errors = Errors.noError();
-        inmateValidator.isValidForLockup(inmate, errors);
-        if (errors.hasErrors())
-            throw new InvalidStateException(errors);
+
+        Assert.notNull(inmate, "[Assertion failed] - inmate is required; it must not be null");
+
+        inmateValidator.validate(inmate, REGISTRATION);
+
         return inmateRepository.save(inmate);
     }
 }
