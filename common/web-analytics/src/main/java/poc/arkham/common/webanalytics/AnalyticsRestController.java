@@ -46,7 +46,7 @@ public class AnalyticsRestController {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime queryTime = getTime(query);
         ZSetOperations<String, String> zset = strRedisTemplate.opsForZSet();
-        List<String> keys = new ArrayList<>(strRedisTemplate.keys("operation:*:analytics"));
+        List<String> keys = new ArrayList<>(strRedisTemplate.keys("analytics:*"));
         List<Object> counts = countPipelined(keys, toLong(queryTime), toLong(now));
         Map<String, Long> analytics = new HashMap<>();
         for (int i = 0; i < keys.size(); i++) {

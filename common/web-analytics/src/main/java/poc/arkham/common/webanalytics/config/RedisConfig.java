@@ -4,8 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
+@EnableAsync
 public class RedisConfig {
 
     @Bean
@@ -22,4 +24,15 @@ public class RedisConfig {
 		redisTemplate.setConnectionFactory(connectionFactory());
 		return redisTemplate;
 	}
+
+	//@Bean("analyticsAsyncExecutor")
+	//public Executor asyncExecutor() {
+	//	ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+	//	executor.setCorePoolSize(2);
+	//	executor.setMaxPoolSize(2);
+	//	executor.setQueueCapacity(500);
+	//	executor.setThreadNamePrefix("GithubLookup-");
+	//	executor.initialize();
+	//	return executor;
+	//}
 }

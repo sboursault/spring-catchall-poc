@@ -35,6 +35,11 @@ if [[ " $@ " =~ " api " ]] || [ $# = 0 ]; then
 fi
 
 echo ""
-echo "===[ run docker ]==="
+echo "===[ start/restart running dockers ]==="
 echo ""
-(set -x; docker-compose up --build $SERVICES)
+(set -x; docker-compose restart $SERVICES)
+
+#echo ""
+#echo "===[ up dockers ]==="
+#echo ""
+#(set -x; docker-compose up -d --build $SERVICES)
