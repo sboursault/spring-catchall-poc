@@ -14,6 +14,6 @@ apply plugin: "org.springframework.boot"
 bootRepackage.enabled = false
 
 dependencies {
-	compile project(':treatment:treatment-domain')
+	compile project(':logistic:logistic-domain')
 	compile("org.springframework.boot:spring-boot-starter-data-mongodb")
 }
