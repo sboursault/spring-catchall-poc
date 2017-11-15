@@ -1,4 +1,4 @@
-package poc.arkham.logistic.domain.model;
+package poc.arkham.common.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;

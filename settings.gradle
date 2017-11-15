@@ -3,6 +3,7 @@ rootProject.name = 'arkham'
 
 include ':common:web-analytics'
 include ':common:web-common'
+include ':common:common-util'
 include ':treatment:treatment-api'
 include ':treatment:treatment-domain'
 include ':treatment:treatment-domain-impl'

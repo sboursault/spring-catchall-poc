@@ -1,5 +1,6 @@
 package poc.arkham.treatment.api.controller;
 
+import poc.arkham.common.util.Errors;
 import poc.arkham.common.web.resource.ErrorResource;
 import poc.arkham.treatment.domain.exception.InmateNotFoundException;
 import poc.arkham.treatment.domain.exception.InvalidStateException;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import poc.arkham.treatment.domain.model.Errors;
 
 import static java.util.stream.Collectors.toList;
 

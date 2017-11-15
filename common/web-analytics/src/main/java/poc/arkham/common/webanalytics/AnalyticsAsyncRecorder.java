@@ -27,9 +27,9 @@ class AnalyticsAsyncRecorder {
 
         // personal reminder:
         // Methods with @Async annotation can return a CompletableFuture.
-        // In such case, the caller should explicitely call one result.get() or result.join().
-        // If not there is a risk that the async task is killed with the caller thread, even if the async process is not finished.
-        // Therefore, if you don't need to orchestrate the async process, just don't return anything.
+        // In such case, the caller should explicitely call result.get() or result.join().
+        // If not, there is a risk that the async task is killed before the end of the process.
+        // So, if you don't need to orchestrate the async process, just don't return anything.
         //
         // also, to join several futures:
         // CompletableFuture.allOf(record1, record2, record3).join();

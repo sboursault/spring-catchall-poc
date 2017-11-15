@@ -1,7 +1,7 @@
 package poc.arkham.treatment.domain.exception;
 
 import org.springframework.util.Assert;
-import poc.arkham.treatment.domain.model.Errors;
+import poc.arkham.common.util.Errors;
 
 import java.util.stream.Collectors;
 

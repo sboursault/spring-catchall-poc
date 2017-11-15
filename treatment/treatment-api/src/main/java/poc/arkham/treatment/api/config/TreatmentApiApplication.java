@@ -19,7 +19,6 @@ import java.time.LocalDate;
  * Sprint boot appplication
  */
 @SpringBootApplication
-@EnableMongoRepositories(basePackages="poc.arkham.treatment.domain.impl.repository")
 @ComponentScan({"poc.arkham.common", "poc.arkham.treatment"})
 public class TreatmentApiApplication {
 

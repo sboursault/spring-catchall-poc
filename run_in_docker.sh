@@ -34,12 +34,15 @@ if [[ " $@ " =~ " api " ]] || [ $# = 0 ]; then
   (set -x; ./gradlew clean build) # use a subshell and print command (https://stackoverflow.com/a/31392037)
 fi
 
-echo ""
-echo "===[ start/restart running dockers ]==="
-echo ""
-(set -x; docker-compose restart $SERVICES)
+if [ $# = 0 ]; then
+  echo ""
+  echo "===[ up dockers ]==="
+  echo ""
+  (set -x; docker-compose up -d --build)
+else
+  echo ""
+  echo "===[ restart dockers ]==="
+  echo ""
+  (set -x; docker-compose restart $SERVICES)
+fi
 
-#echo ""
-#echo "===[ up dockers ]==="
-#echo ""
-#(set -x; docker-compose up -d --build $SERVICES)
