@@ -17,12 +17,7 @@ bootRepackage.enabled = false
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-hateoas"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" // allows @JsonFormat definitions
-
-    // swagger
-    compile "io.springfox:springfox-swagger2:${versions.swagger}"
-    compile "io.springfox:springfox-swagger-ui:${versions.swagger}"
 
     // tracing
     compile "org.springframework.cloud:spring-cloud-starter-zipkin:1.2.5.RELEASE"

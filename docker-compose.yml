@@ -1,16 +1,28 @@
 version: '2'
 services:
+
   nginx:
     image: "nginx:1.13"
     ports:
     - "80:80"
     - "443:443" # ssl handshake
     links:
-    - "api:asylumapi"
+    - "treatment-api"
     volumes:
     #- "/host/path:/docker/path"
     - "./ext/nginx/default.conf:/etc/nginx/conf.d/default.conf"
-  api:
+
+  front-office:
+    build: ./ext/spring-boot
+    volumes:
+    - "./front-office/build/libs/front-office-0.0.1-SNAPSHOT.jar:/app.jar"
+    ports:
+    - "8085:8080"
+    - "8005:8000" # remote debug
+    links:
+    - "treatment-api"
+
+  treatment-api:
     build: ./ext/spring-boot
     volumes:
     - "./treatment/treatment-api/build/libs/treatment-api-0.0.1-SNAPSHOT.jar:/app.jar"
@@ -21,6 +33,7 @@ services:
     - "db:asylumdb" # db service will be reachable with hosts "db" and "asylumdb"
     environment:
     - "APP_BASE_URL=http://localhost/api" # overload application propertry "app.base-url"
+
   #logistic-api:
   #  build: ./etc/spring-boot
   #  ports:
@@ -30,9 +43,11 @@ services:
   #  - "db:asylumdb" # db service will be reachable with hosts "db" and "asylumdb"
   #  volumes:
   #  - "./logistic/logistic-api/build/libs/logistic-api-0.1.jar:/app.jar"
+
   db:
     image: "mongo:3.0"
     command: --smallfiles
+
   redis:
     image: "redis:4.0"
     ports:
@@ -42,9 +57,10 @@ services:
     links:
     - "redis:redis"
     ports:
-    - "8081:8081"
+    - "6380:8081"
     environment:
     - "REDIS_HOSTS=local:redis:6379"
+
   elasticsearch:
     image: "elasticsearch:5.6"
     ports:

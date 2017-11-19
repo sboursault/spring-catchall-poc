@@ -1,8 +1,9 @@
-package poc.arkham.common.web.config;
+package poc.arkham.common.apiserver.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import poc.arkham.common.web.config.ApplicationProperties;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;

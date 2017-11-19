@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class TracingCongig {
+public class TracingConfig {
 
     /*
      * Defines the logs to send to zipkin

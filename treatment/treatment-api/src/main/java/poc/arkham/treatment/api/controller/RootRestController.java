@@ -13,7 +13,9 @@ public class RootRestController {
 
     @GetMapping
     public ResourceSupport start() {
-        return new RootResource();
+        RootResource rootResource = new RootResource();
+        rootResource.add(Link.toInmateCollection().withRel("inmates"));
+        return rootResource;
     }
 
 }

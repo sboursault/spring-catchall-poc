@@ -14,7 +14,6 @@ apply plugin: "org.springframework.boot"
 bootRepackage.enabled = false
 
 dependencies {
-	compile project(':common:common-util')
-	compile("org.springframework.boot:spring-boot-starter-data-mongodb")
-	compileOnly("org.projectlombok:lombok") // TODO remove
+	compileOnly "org.projectlombok:lombok" // @Data makes sense on resource objects
+	compile project(':common:api-server')
 }

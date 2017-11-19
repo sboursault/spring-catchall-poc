@@ -11,10 +11,13 @@ buildscript {
 apply plugin: "java"
 apply plugin: "org.springframework.boot"
 
-bootRepackage.enabled = false
+version = "0.0.1-SNAPSHOT"
 
 dependencies {
-	compile project(':common:common-util')
-	compile("org.springframework.boot:spring-boot-starter-data-mongodb")
-	compileOnly("org.projectlombok:lombok") // TODO remove
+
+	compile project(':treatment:treatment-api-resource')
+
+	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+	compile("org.springframework.boot:spring-boot-devtools")
+
 }

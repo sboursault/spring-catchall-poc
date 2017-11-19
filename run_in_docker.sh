@@ -27,7 +27,7 @@ done
 shift $((OPTIND-1)) # shift all processed options away from parameters (keep only operands)
 SERVICES=$*
 
-if [[ " $@ " =~ " api " ]] || [ $# = 0 ]; then
+if [[ " $@ " =~ " api " ]] || [[ " $@ " =~ " front-office " ]] || [ $# = 0 ]; then
   echo ""
   echo "===[ building app ]==="
   echo ""

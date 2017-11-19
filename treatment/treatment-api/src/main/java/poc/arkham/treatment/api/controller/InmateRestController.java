@@ -7,7 +7,6 @@ import poc.arkham.treatment.domain.exception.InmateNotFoundException;
 import poc.arkham.treatment.domain.exception.InvalidStateException;
 import poc.arkham.treatment.domain.model.Inmate;
 import poc.arkham.treatment.domain.service.InmateService;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -20,13 +19,13 @@ import java.util.stream.Collectors;
 import static poc.arkham.common.web.util.RestPreconditions.validate;
 import static poc.arkham.common.web.util.RestPreconditions.validateNotNull;
 import static poc.arkham.common.web.util.RestPreconditions.validateNull;
+import static poc.arkham.treatment.api.resource.InmatesResource.InmatesResourceBuilder.newInmatesResource;
 
 /**
  * <p>A simple rest controller to expose inmates.</p>
  */
 @RestController
 @RequestMapping("/inmates")
-@Api(description = "inmates API")
 public class InmateRestController {
 
     @Autowired
@@ -91,10 +90,12 @@ public class InmateRestController {
                 .map(InmateMapper.INSTANCE::map)
                 .collect(Collectors.toList());
         resources.forEach(it -> it.add(Link.toInmate(it.getInmateId())));
-        InmatesResource target = new InmatesResource(resources);
-        target.add(Link.toInmateCollection());
-        target.add(Link.toStart());
-        return target;
+        return newInmatesResource()
+                .results(resources)
+                .with(
+                        Link.toInmateCollection(),
+                        Link.toStart())
+                .build();
     }
 
 }
