@@ -16,6 +16,13 @@ plugins {
 apply plugin: "java"
 apply plugin: "org.springframework.boot"
 apply plugin: 'org.asciidoctor.convert'
+apply plugin: 'idea' // adds build/generated/source to classpath
+
+dependencyManagement {
+	imports {
+		mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Dalston.SR4'
+	}
+}
 
 dependencies {
 
@@ -38,9 +45,17 @@ dependencies {
 	runtime project(':treatment:treatment-domain-impl')
 	runtime project(':common:web-analytics')
 
+	compile 'org.springframework.cloud:spring-cloud-starter-zookeeper-discovery'
+
 }
 
 asciidoctor {
 	attributes \
       'snippets': file('build/snippets')
+}
+
+idea {
+	module {
+		sourceDirs += file('build/generated/source')
+	}
 }

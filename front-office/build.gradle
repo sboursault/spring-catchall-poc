@@ -13,11 +13,23 @@ apply plugin: "org.springframework.boot"
 
 version = "0.0.1-SNAPSHOT"
 
+
+dependencyManagement {
+	imports {
+		mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Dalston.SR4'
+	}
+}
+
+
 dependencies {
 
 	compile project(':treatment:treatment-api-resource')
 
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 	compile("org.springframework.boot:spring-boot-devtools")
+
+	compile 'org.springframework.cloud:spring-cloud-starter-zookeeper-discovery'
+	compile 'org.springframework.cloud:spring-cloud-starter-netflix-ribbon:1.4.0.RELEASE'
+
 
 }

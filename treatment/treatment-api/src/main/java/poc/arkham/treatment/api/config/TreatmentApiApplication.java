@@ -1,6 +1,7 @@
 package poc.arkham.treatment.api.config;
 
 import com.google.common.collect.Lists;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 import poc.arkham.treatment.domain.service.InmateService;
 import poc.arkham.treatment.domain.model.Aka;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
  * Sprint boot appplication
  */
 @SpringBootApplication
+@EnableDiscoveryClient
 @ComponentScan({"poc.arkham.common", "poc.arkham.treatment"})
 public class TreatmentApiApplication {
 

@@ -12,6 +12,12 @@ services:
     #- "/host/path:/docker/path"
     - "./ext/nginx/default.conf:/etc/nginx/conf.d/default.conf"
 
+  zookeeper:
+    image: "zookeeper:3.4"
+    restart: always
+    ports:
+      - 2181:2181
+
   front-office:
     build: ./ext/spring-boot
     volumes:
@@ -20,16 +26,18 @@ services:
     - "8085:8080"
     - "8005:8000" # remote debug
     links:
+    - "zookeeper"
     - "treatment-api"
 
   treatment-api:
     build: ./ext/spring-boot
     volumes:
     - "./treatment/treatment-api/build/libs/treatment-api-0.0.1-SNAPSHOT.jar:/app.jar"
-    ports:
-    - "8080:8080"
-    - "8000:8000" # remote debug
+    #ports:
+    #- "8080:8080"
+    #- "8000:8000" # remote debug
     links:
+    - "zookeeper"
     - "db:asylumdb" # db service will be reachable with hosts "db" and "asylumdb"
     environment:
     - "APP_BASE_URL=http://localhost/api" # overload application propertry "app.base-url"
@@ -52,36 +60,53 @@ services:
     image: "redis:4.0"
     ports:
     - "6379:6379"
-  redis-commander:
-    image: "rediscommander/redis-commander:latest"
-    links:
-    - "redis:redis"
-    ports:
-    - "6380:8081"
-    environment:
-    - "REDIS_HOSTS=local:redis:6379"
+  #redis-commander:
+  #  image: "rediscommander/redis-commander:latest"
+  #  links:
+  #  - "redis:redis"
+  #  ports:
+  #  - "6380:8081"
+  #  environment:
+  #  - "REDIS_HOSTS=local:redis:6379"
 
-  elasticsearch:
-    image: "elasticsearch:5.6"
-    ports:
-    - "9200:9200"
-    - "9300:9300"
-  kibana:
-    image: "kibana:5.6"
-    ports:
-    - "5601:5601"
-    links:
-    - elasticsearch
-  logstash:
-    image: "logstash:5.6"
-    ports:
-    - "5000:5000"
-    links:
-    - elasticsearch
-    volumes:
-    - ./ext/logstash:/etc/logstash/conf.d
-    command: logstash -f /etc/logstash/conf.d/logstash.conf
+  #elasticsearch:
+  #  image: "elasticsearch:5.6"
+  #  ports:
+  #  - "9200:9200"
+  #  - "9300:9300"
+  #kibana:
+  #  image: "kibana:5.6"
+  #  ports:
+  #  - "5601:5601"
+  #  links:
+  #  - elasticsearch
+  #logstash:
+  #  image: "logstash:5.6"
+  #  ports:
+  #  - "5000:5000"
+  #  links:
+  #  - elasticsearch
+  #  volumes:
+  #  - ./ext/logstash:/etc/logstash/conf.d
+  #  command: logstash -f /etc/logstash/conf.d/logstash.conf
   zipkin:
     image: openzipkin/zipkin
     ports:
     - "9411:9411"
+
+
+  zookeeper-web:
+    image: elkozmon/zoonavigator-web:latest
+    ports:
+     - "9000:8000"
+    environment:
+      API_HOST: "zookeeper-api"
+      API_PORT: 9000
+    links:
+     - zookeeper-api
+    restart: always
+  zookeeper-api:
+    image: elkozmon/zoonavigator-api:latest
+    environment:
+      SERVER_HTTP_PORT: 9000
+    restart: always

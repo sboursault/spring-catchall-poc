@@ -1,0 +1,22 @@
+spring:
+
+  application:
+    name: front-office
+
+  cloud:
+      zookeeper:
+        connect-string: zookeeper:2181
+        discovery:
+          enabled: true
+
+  zipkin:
+    baseUrl: http://zipkin:9411/
+    # to use service discoveryn, change value to "http://zipkinserver/"
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+
+treatment-api:
+  ribbon:
+    ServerListRefreshInterval: 15000

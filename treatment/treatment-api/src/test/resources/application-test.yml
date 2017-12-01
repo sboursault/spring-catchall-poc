@@ -1,0 +1,13 @@
+
+spring:
+  data:
+    mongodb:
+      uri: "mongodb://localhost:27017/test"
+
+  cloud:
+    zookeeper:
+      enabled: false
+
+asylum:
+  analytics:
+    enabled: false

@@ -17,10 +17,15 @@ featuring:
 * integration tests based on spring's mockMvc and an embedded mongodb
 * a docker-composed development environment
 * simple analytics with redis
+* the elk stack to browse logs (logstash, elastic-search, kibana)
+* Async processing for analytics
+* tracing with correlation to aggregate the logs for a single transaction
+* service registration and discovery with zookeeper
+* client side load balancing with ribbon
 
 Yet to come: 
 * uri and model versionning
-* improved discoverability
+* improved hateoas discoverability
 * decouple storage representation from the one exposed
 * access restrictions
 * project versionning and packaging (should include a snapshot dependency)
@@ -28,7 +33,7 @@ Yet to come:
 * data import with spring integration
 * https dev environment (https://hub.docker.com/r/marvambass/nginx-ssl-secure/)
 * elastic search index
-* load balancing, shared session storage and log aggregation
+* load balancing, shared session storage
 * blue/greeen deployment
 * discover the api through the browser
 * add a sort of task engine to rerun failed tasks (spring integration ?)

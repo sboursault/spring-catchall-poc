@@ -1,0 +1,25 @@
+spring:
+
+  application:
+    name: treatment-api
+
+  cloud:
+      zookeeper:
+        connect-string: zookeeper:2181
+        discovery:
+          enabled: true
+
+  data:
+    mongodb:
+      uri: mongodb://asylumdb:27017/test
+
+  zipkin:
+    baseUrl: http://zipkin:9411/
+    # to use service discovery, change value to "http://zipkinserver/"
+
+treatment-api:
+  base-url: http://localhost/
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
