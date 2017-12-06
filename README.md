@@ -20,8 +20,8 @@ featuring:
 * the elk stack to browse logs (logstash, elastic-search, kibana)
 * Async processing for analytics
 * tracing with correlation to aggregate the logs for a single transaction
-* service registration and discovery with zookeeper
-* client side load balancing with ribbon
+* service discovery with zookeeper
+* client side load balancing with ribbon and spring-retry
 
 Yet to come: 
 * uri and model versionning

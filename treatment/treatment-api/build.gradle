@@ -18,11 +18,6 @@ apply plugin: "org.springframework.boot"
 apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'idea' // adds build/generated/source to classpath
 
-dependencyManagement {
-	imports {
-		mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Dalston.SR4'
-	}
-}
 
 dependencies {
 
@@ -47,6 +42,14 @@ dependencies {
 
 	compile 'org.springframework.cloud:spring-cloud-starter-zookeeper-discovery'
 
+	compile 'org.springframework.boot:spring-boot-starter-actuator'
+
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
+	}
 }
 
 asciidoctor {

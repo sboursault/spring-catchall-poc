@@ -12,8 +12,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@EnableDiscoveryClient
-@RibbonClient(name = "treatment-api")
 @ComponentScan("poc.arkham.frontoffice")
 public class FrontOfficeApplication {
 
@@ -21,9 +19,4 @@ public class FrontOfficeApplication {
         SpringApplication.run(FrontOfficeApplication.class, args);
     }
 
-    @LoadBalanced
-    @Bean
-    RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
-        return restTemplateBuilder.build();
-    }
 }

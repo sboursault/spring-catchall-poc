@@ -1,6 +1,9 @@
 ext {
     versions = [
-        springBoot : "1.5.4.RELEASE",
+        springBoot : "1.5.9.RELEASE",
+        springCloud : "Edgware.RELEASE",
+        springCloudZipkin : "1.3.0.RELEASE",
+        springCloudZookeeperDiscovery : "1.2.0.RELEASE",
         mapstruct  : "1.2.0.CR2",
         swagger :    "2.7.0"
     ]

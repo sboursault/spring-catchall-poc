@@ -33,14 +33,14 @@ services:
     build: ./ext/spring-boot
     volumes:
     - "./treatment/treatment-api/build/libs/treatment-api-0.0.1-SNAPSHOT.jar:/app.jar"
-    #ports:
-    #- "8080:8080"
+    ports:
+    - "8080"
     #- "8000:8000" # remote debug
     links:
     - "zookeeper"
     - "db:asylumdb" # db service will be reachable with hosts "db" and "asylumdb"
     environment:
-    - "APP_BASE_URL=http://localhost/api" # overload application propertry "app.base-url"
+    - "TREATMENT_API_BASE_URL=http://localhost/api" # overload application propertry "app.base-url"
 
   #logistic-api:
   #  build: ./etc/spring-boot
@@ -95,18 +95,18 @@ services:
     - "9411:9411"
 
 
-  zookeeper-web:
-    image: elkozmon/zoonavigator-web:latest
-    ports:
-     - "9000:8000"
-    environment:
-      API_HOST: "zookeeper-api"
-      API_PORT: 9000
-    links:
-     - zookeeper-api
-    restart: always
-  zookeeper-api:
-    image: elkozmon/zoonavigator-api:latest
-    environment:
-      SERVER_HTTP_PORT: 9000
-    restart: always
+  #zookeeper-web:
+  #  image: elkozmon/zoonavigator-web:latest
+  #  ports:
+  #   - "9000:8000"
+  #  environment:
+  #    API_HOST: "zookeeper-api"
+  #    API_PORT: 9000
+  #  links:
+  #   - zookeeper-api
+  #  restart: always
+  #zookeeper-api:
+  #  image: elkozmon/zoonavigator-api:latest
+  #  environment:
+  #    SERVER_HTTP_PORT: 9000
+  #  restart: always

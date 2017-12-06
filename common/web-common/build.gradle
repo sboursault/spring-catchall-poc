@@ -20,8 +20,17 @@ dependencies {
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" // allows @JsonFormat definitions
 
     // tracing
-    compile "org.springframework.cloud:spring-cloud-starter-zipkin:1.2.5.RELEASE"
+    compile "org.springframework.cloud:spring-cloud-starter-zipkin:${versions.springCloudZipkin}"
     compile "net.logstash.logback:logstash-logback-encoder:4.9"
     compile "ch.qos.logback:logback-classic"
 
+    compile "org.springframework.cloud:spring-cloud-starter-zookeeper-discovery:${versions.springCloudZookeeperDiscovery}"
+
+}
+
+dependencyManagement {
+    imports {
+        // I don't know why, but the spring cloud dependencies maven bom dosn't work here
+        //mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
+    }
 }

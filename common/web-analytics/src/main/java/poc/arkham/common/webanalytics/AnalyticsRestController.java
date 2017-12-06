@@ -4,11 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.StringRedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.hateoas.VndErrors;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -32,6 +31,8 @@ public class AnalyticsRestController {
 
     private final static Pattern TIME_QUERY_PART = Pattern.compile("^(\\d+)([hms])$");
 
+    private final int MAX_RESULT = Integer.MAX_VALUE;
+
     @Autowired
     private StringRedisTemplate strRedisTemplate;
 
@@ -46,7 +47,7 @@ public class AnalyticsRestController {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime queryTime = getTime(query);
         ZSetOperations<String, String> zset = strRedisTemplate.opsForZSet();
-        List<String> keys = new ArrayList<>(strRedisTemplate.keys("analytics:*"));
+        List<String> keys = findKeys("analytics:*");
         List<Object> counts = countPipelined(keys, toLong(queryTime), toLong(now));
         Map<String, Long> analytics = new HashMap<>();
         for (int i = 0; i < keys.size(); i++) {
@@ -58,6 +59,30 @@ public class AnalyticsRestController {
         return analytics.entrySet().stream()
                 .sorted((e1, e2) -> -e1.getValue().compareTo(e2.getValue()))
                 .collect(Collectors.toList());
+    }
+
+    private List<String> findKeys(String keyPattern) {
+
+        Assert.hasLength(keyPattern, "[Assertion failed] - keyPattern must have length; it must not be null or empty");
+
+        RedisConnection connection = strRedisTemplate.getConnectionFactory().getConnection();
+        try {
+            Cursor<byte[]> c = connection.scan(
+                    ScanOptions.scanOptions().match(keyPattern).build()
+            );
+
+            List<String> results = new ArrayList<>();
+            int i = 0;
+            while (c.hasNext() && i < MAX_RESULT) {
+                results.add(new String(c.next()));
+                i++;
+            }
+            return results;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     /*
