@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class InmateRestControllerTest extends AbstractRestControllerTest {
 
     @Autowired
-    InmateRepository repository;
+    private InmateRepository repository;
 
     @Autowired
     private MockMvc mockMvc;

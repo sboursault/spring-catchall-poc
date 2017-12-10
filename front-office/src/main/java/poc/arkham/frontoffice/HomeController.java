@@ -5,18 +5,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import poc.arkham.frontoffice.manager.InmateManager;
+import poc.arkham.frontoffice.repository.InmateRepository;
 
 @Controller
 @RequestMapping("/")
 public class HomeController {
 
     @Autowired
-    private InmateManager inmateManager;
+    private InmateRepository inmateRepository;
 
     @GetMapping
     public String get(Model model) {
-        model.addAttribute("inmates", inmateManager.fetchInmates().getResults());
+        model.addAttribute("inmates", inmateRepository.findAll().getResults());
         return "home";
     }
 

@@ -24,11 +24,11 @@ class DefaultInmateService implements InmateService {
     private InmateRepository inmateRepository;
 
     public Inmate findById(String id) throws InmateNotFoundException {
-        Inmate entity = inmateRepository.findOne(id);
-        if (entity == null) {
-            throw new InmateNotFoundException(id);
-        }
-        return entity;
+        return inmateRepository.findById(id)
+                .orElseThrow(() -> new InmateNotFoundException(id));
+        // throwing an InmateNotFoundException is arguable.
+        // We could return a java.util.Optional (much cheaper for the JVM).
+        // On the other hand, on more complex method, an exception may simplify the logic.
     }
 
     public List<Inmate> findAll() {
