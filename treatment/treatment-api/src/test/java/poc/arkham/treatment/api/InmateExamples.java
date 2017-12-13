@@ -33,4 +33,29 @@ public class InmateExamples {
                 .lastname("Isley")
                 .aka(Lists.newArrayList(Aka.builder().name("Poison Ivy").build()));
     }
+
+    public static Inmate.InmateBuilder mrFreeze() {
+        return Inmate.builder()
+                .id("mrFreeze_888")
+                .firstname("Victor")
+                .lastname("Fries")
+                .aka(Lists.newArrayList(Aka.builder().name("Mr. Freeze").build()));
+    }
+
+    public static Inmate.InmateBuilder madHatter() {
+        return Inmate.builder()
+                .id("madHatter_999")
+                .firstname("Jervis")
+                .lastname("Tetch")
+                .aka(Lists.newArrayList(Aka.builder().name("Mad Hatter").build()));
+    }
+
+    public static Inmate.InmateBuilder scarecrow() {
+        return Inmate.builder()
+                .id("scarecrow_111")
+                .firstname("Jonathan")
+                .lastname("Crane")
+                .aka(Lists.newArrayList(Aka.builder().name("Scarecrow").build()));
+    }
+
 }
