@@ -2,21 +2,19 @@
 package poc.arkham.treatment.api;
 
 
-import com.google.common.collect.Lists;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import poc.arkham.treatment.domain.impl.repository.InmateRepository;
-import poc.arkham.treatment.domain.model.Aka;
 import poc.arkham.treatment.domain.model.Inmate;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,10 +40,14 @@ public class InmateRestControllerCollectionTest extends AbstractRestControllerTe
         repository.save(InmateExamples.poisonIvy().id("poisonIvy").build());
 
         mockMvc.perform(
-                        get("/inmates"))
+                        get("/v1/inmates"))
                 .andDo(print())
                 .andExpect(
                         status().isOk())
+                .andExpect(
+                        header().string("Content-Range", "0-2/3"))
+                .andExpect(
+                        header().string("Accept-Range", "inmates 25"))
                 .andExpect(
                         jsonPath("$._embedded[*].id",
                                 containsInAnyOrder("penguin", "joker", "poisonIvy")));
@@ -54,19 +56,76 @@ public class InmateRestControllerCollectionTest extends AbstractRestControllerTe
     @Test
     public void find_partial() throws Exception {
 
-        for (int i = 1; i <= 30; i++) {
+        for (int i = 0; i < 30; i++) {
             repository.save(Inmate.builder().id("inmate_" + i).firstname("unknown").lastname("unknown").build());
         }
 
         mockMvc.perform(
-                get("/inmates?page=0&size=3&range=0-4"))
+                get("/v1/inmates?range=3-6"))
                 .andDo(print())
                 .andExpect(
                         status().isPartialContent())
                 .andExpect(
+                        header().string("Content-Range", "3-6/4"))
+                .andExpect(
+                        header().string("Accept-Range", "inmates 25"))
+                .andExpect(
                         jsonPath("$._embedded[*].id",
-                                containsInAnyOrder("inmate_1", "inmate_2", "inmate_3", "inmate_4", "inmate_5")));
+                                containsInAnyOrder("inmate_3", "inmate_4", "inmate_5", "inmate_6")));
     }
 
+    @Test
+    public void find_partial_end() throws Exception {
 
+        for (int i = 0; i < 30; i++) {
+            repository.save(Inmate.builder().id("inmate_" + i).firstname("unknown").lastname("unknown").build());
+        }
+
+        mockMvc.perform(
+                get("/v1/inmates?range=28-40"))
+                .andDo(print())
+                .andExpect(
+                        status().isPartialContent())
+                .andExpect(
+                        header().string("Content-Range", "28-29/2"))
+                .andExpect(
+                        header().string("Accept-Range", "inmates 25"))
+                .andExpect(
+                        jsonPath("$._embedded[*].id",
+                                containsInAnyOrder("inmate_28", "inmate_29")));
+    }
+
+    @Test
+    public void find_too_big_range() throws Exception {
+
+        for (int i = 0; i < 30; i++) {
+            repository.save(Inmate.builder().id("inmate_" + i).firstname("unknown").lastname("unknown").build());
+        }
+
+        mockMvc.perform(
+                get("/v1/inmates?range=0-25"))
+                .andDo(print())
+                .andExpect(
+                        status().isBadRequest())
+                .andExpect(
+                        jsonPath("$.messages[0]", containsString(
+                                "Requested range is too big")));
+    }
+
+    @Test
+    public void find_malformed_range() throws Exception {
+
+        for (int i = 0; i < 30; i++) {
+            repository.save(Inmate.builder().id("inmate_" + i).firstname("unknown").lastname("unknown").build());
+        }
+
+        mockMvc.perform(
+                get("/v1/inmates?range=0-oups"))
+                .andDo(print())
+                .andExpect(
+                        status().isBadRequest())
+                .andExpect(
+                        jsonPath("$.messages[0]", containsString(
+                                "range must match ^\\d+-\\d+$")));
+    }
 }

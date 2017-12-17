@@ -3,7 +3,15 @@ package poc.arkham.treatment.api.controller;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import poc.arkham.common.apiserver.util.ResponseEnityFactory;
 import poc.arkham.common.util.PartialResult;
 import poc.arkham.common.web.util.RangeQueryParameter;
 import poc.arkham.treatment.api.mapper.InmateMapper;
@@ -18,32 +26,31 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.HttpStatus.PARTIAL_CONTENT;
-import static poc.arkham.common.web.util.RestPreconditions.*;
+import static poc.arkham.common.web.util.RestPreconditions.validate;
+import static poc.arkham.common.web.util.RestPreconditions.validateNotNull;
+import static poc.arkham.common.web.util.RestPreconditions.validateNull;
 import static poc.arkham.treatment.api.resource.InmatesResource.InmatesResourceBuilder.newInmatesResource;
 
 /**
  * <p>A simple rest controller to expose inmates.</p>
  */
 @RestController
-@RequestMapping("/inmates")
+@RequestMapping("/v1/inmates")
 public class InmateRestController {
+
+    private static final int MAXIMUM_RANGE_SIZE = 25;
+    private static final String RESOURCE = "inmates";
 
     @Autowired
     private InmateService inmateService;
 
     @GetMapping
-    public ResponseEntity find(@RequestParam(name = "range", required = false) String range) {
-        String newRange = StringUtils.defaultIfBlank(range, "0-19");
-        RangeQueryParameter r = new RangeQueryParameter(newRange);
-
-
-        // if range is too big, return 400 with reason/error : "Requested range not allowed"
-        PartialResult<Inmate> results = inmateService.find(r.getRange());
-        return ResponseEntity.status(results.getSize() < results.getTotalNumberOfResults() ? PARTIAL_CONTENT : OK)
-                .header("Content-Range", results.getRange().getMinimumInteger() + "-" + (results.getRange().getMinimumInteger() + results.getSize()) + "/" + results.getSize())
-                .header("Accept-Range", "inmate 20")
+    public ResponseEntity find(
+            @RequestParam(name = "range", required = false, defaultValue = "0-19")
+            RangeQueryParameter rangeQuery) {
+        validate(rangeQuery.getSize() <= MAXIMUM_RANGE_SIZE, "Requested range is too big");
+        PartialResult<Inmate> results = inmateService.find(rangeQuery.getValue());
+        return ResponseEnityFactory.collection(results, RESOURCE, MAXIMUM_RANGE_SIZE)
                 .body(convertToResourceList(results));
     }
 

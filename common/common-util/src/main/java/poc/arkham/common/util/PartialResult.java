@@ -32,11 +32,15 @@ public class PartialResult<T> {
         return content.size();
     }
 
-    public IntRange getRange() {
-        return range;
-    }
-
     public int getTotalNumberOfResults() {
         return totalNumberOfResults;
+    }
+
+    public int getOffset() {
+        return range.getMinimumInteger();
+    }
+
+    public int getLimit() {
+        return range.getMinimumInteger() + getSize() -1;
     }
 }

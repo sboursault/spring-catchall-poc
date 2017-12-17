@@ -11,8 +11,8 @@ import static poc.arkham.common.web.util.RestPreconditions.validateWithRegex;
  */
 public class RangeQueryParameter {
 
-    int offset; // lower range
-    int limit; // upper range
+    private final int offset; // lower range
+    private final int limit; // upper range
 
     public RangeQueryParameter(String rangeParam) {
         String newRange = StringUtils.defaultIfBlank(rangeParam, "0-19");
@@ -31,7 +31,11 @@ public class RangeQueryParameter {
         return offset;
     }
 
-    public IntRange getRange() {
+    public IntRange getValue() {
         return new IntRange(offset, limit);
+    }
+
+    public int getSize() {
+        return limit - offset + 1;
     }
 }

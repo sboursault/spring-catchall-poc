@@ -37,7 +37,7 @@ public class InmateRestControllerDocumentation extends AbstractRestControllerTes
         repository.save(InmateExamples.thePenguin().id("penguin_1234").build());
 
         mockMvc.perform(
-                        get("/inmates/penguin_1234"))
+                        get("/v1/inmates/penguin_1234"))
                 .andDo(print())
                 .andDo(document("fields",
                         responseFields(

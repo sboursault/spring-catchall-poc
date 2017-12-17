@@ -44,7 +44,7 @@ public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
         repository.save(InmateExamples.thePenguin().id("penguin_1234").build());
 
         mockMvc.perform(
-                        get("/inmates/penguin_1234"))
+                        get("/v1/inmates/penguin_1234"))
                 .andDo(
                         print())
                 .andExpect(
@@ -60,7 +60,7 @@ public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
     @Test
     public void find_one_unknown() throws Exception {
         mockMvc.perform(
-                        get("/inmates/calendar_man_5678"))
+                        get("/v1/inmates/calendar_man_5678"))
                 .andDo(
                         print())
                 .andExpect(
@@ -75,7 +75,7 @@ public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
     @Test
     public void post_success() throws Exception { // also verifies serialization/deserialization
         MvcResult result = mockMvc.perform(
-                        postJson("/inmates").content("{" +
+                        postJson("/v1/inmates").content("{" +
                                 "\"firstname\": \"Harvey\"," +
                                 "\"lastname\": \"Dent\"," +
                                 "\"birthDate\": \"1953.01.25\"," +
@@ -102,7 +102,7 @@ public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
         String id = (String) new JSONObject(result.getResponse().getContentAsString()).get("id");
 
         mockMvc.perform(
-                        get("/inmates/" + id))
+                        get("/v1/inmates/" + id))
                 .andExpect(
                         jsonPath("$.firstname", is("Harvey")));
     }
@@ -110,7 +110,7 @@ public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
     @Test
     public void post_incomplete() throws Exception {
         mockMvc.perform(
-                        postJson("/inmates").content("{}"))
+                        postJson("/v1/inmates").content("{}"))
                 .andDo(
                         print())
                 .andExpect(
@@ -126,7 +126,7 @@ public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
     @Test
     public void post_unknown_field() throws Exception {
         mockMvc.perform(
-                        postJson("/inmates").content("{" +
+                        postJson("/v1/inmates").content("{" +
                                 "\"firstname\": \"Harvey\"," +
                                 "\"lastname\": \"Dent\"," +
                                 "\"unknown_field\": \"35\"" +
@@ -144,7 +144,7 @@ public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
     @Test
     public void post_with_no_content() throws Exception {
         mockMvc.perform(
-                postJson("/inmates"))
+                postJson("/v1/inmates"))
                 .andExpect(
                         status().isBadRequest());
     }
@@ -152,7 +152,7 @@ public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
     @Test
     public void post_invalid_date() throws Exception {
         mockMvc.perform(
-                        postJson("/inmates").content("{" +
+                        postJson("/v1/inmates").content("{" +
                                 "\"firstname\": \"Harvey\"," +
                                 "\"lastname\": \"Dent\"," +
                                 "\"birthDate\": \"2000_01_01\"" +
@@ -176,7 +176,7 @@ public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
                 .build());
 
         mockMvc.perform(
-                putJson("/inmates/joker_5555").content("{" +
+                putJson("/v1/inmates/joker_5555").content("{" +
                         "\"firstname\": \"unknown firstname\"," +
                         "\"lastname\": \"unknown lastname\"}"))
                 .andDo(print())
@@ -193,7 +193,7 @@ public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
     @Test
     public void update_unknown() throws Exception {
         mockMvc.perform(
-                        putJson("/inmates/joker_5555").content("{" +
+                        putJson("/v1/inmates/joker_5555").content("{" +
                                 "\"firstname\": \"unknown\"," +
                                 "\"lastname\": \"unknown\"}"))
                 .andExpect(
@@ -213,7 +213,7 @@ public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
                 .build());
 
         mockMvc.perform(
-                        putJson("/inmates/joker_5555")
+                        putJson("/v1/inmates/joker_5555")
                                 .content("{\"lastname\": \"unknown lastname\"}"))
                 .andDo(print())
                 .andExpect(
@@ -231,7 +231,7 @@ public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
                 .build());
 
         mockMvc.perform(
-                        putJson("/inmates/joker_5555").content("{" +
+                        putJson("/v1/inmates/joker_5555").content("{" +
                                 "\"id\": \"joker_3333\"," +
                                 "\"firstname\": \"unknown\"," +
                                 "\"lastname\": \"unknown\"}"))

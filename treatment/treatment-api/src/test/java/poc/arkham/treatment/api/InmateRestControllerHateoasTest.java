@@ -40,7 +40,7 @@ public class InmateRestControllerHateoasTest extends AbstractRestControllerTest 
                 .andExpect(
                         status().isOk())
                 .andExpect(
-                        jsonPath("$._links.inmates.href", is("http://localhost/inmates")));
+                        jsonPath("$._links.inmates.href", is("http://localhost/v1/inmates")));
     }
 
     @Test
@@ -51,16 +51,16 @@ public class InmateRestControllerHateoasTest extends AbstractRestControllerTest 
         repository.save(poisonIvy().id("poisonIvy_7777").build());
 
         mockMvc.perform(
-                        get("/inmates"))
+                        get("/v1/inmates"))
                 .andDo(
                         print())
                 .andExpect(
                         status().isOk())
                 .andExpect(
                         jsonPath("$._embedded[?(@.id == 'joker_5555')]._links.self.href",
-                                contains("http://localhost/inmates/joker_5555")))
+                                contains("http://localhost/v1/inmates/joker_5555")))
                 .andExpect(
-                        jsonPath("$._links.collection.href", is("http://localhost/inmates")))
+                        jsonPath("$._links.collection.href", is("http://localhost/v1/inmates")))
                 .andExpect(
                         jsonPath("$._links.start.href", is("http://localhost/")));
     }
@@ -71,13 +71,13 @@ public class InmateRestControllerHateoasTest extends AbstractRestControllerTest 
         repository.save(thePenguin().id("penguin_1234").build());
 
         mockMvc.perform(
-                        get("/inmates/penguin_1234"))
+                        get("/v1/inmates/penguin_1234"))
                 .andExpect(
                         status().isOk())
                 .andExpect(
-                        jsonPath("$._links.self.href", is("http://localhost/inmates/penguin_1234")))
+                        jsonPath("$._links.self.href", is("http://localhost/v1/inmates/penguin_1234")))
                 .andExpect(
-                        jsonPath("$._links.collection.href", is("http://localhost/inmates")))
+                        jsonPath("$._links.collection.href", is("http://localhost/v1/inmates")))
                 .andExpect(
                         jsonPath("$._links.start.href", is("http://localhost/")));
     }
@@ -85,7 +85,7 @@ public class InmateRestControllerHateoasTest extends AbstractRestControllerTest 
     @Test
     public void post_returns_the_entity_location() throws Exception {
         MvcResult result = mockMvc.perform(
-                        postJson("/inmates").content("{\"firstname\": \"Harvey\", \"lastname\": \"Dent\"}"))
+                        postJson("/v1/inmates").content("{\"firstname\": \"Harvey\", \"lastname\": \"Dent\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", not(isEmptyString())))
                 .andReturn();

@@ -10,6 +10,7 @@ public class RangeQueryParameterUnitTest {
     public void validateWithRegex_ok() {
         assertThat(new RangeQueryParameter("5-8").getOffset()).isEqualTo(5);
         assertThat(new RangeQueryParameter("5-8").getLimit()).isEqualTo(8);
+        assertThat(new RangeQueryParameter("5-8").getSize()).isEqualTo(4);
     }
 
 }
