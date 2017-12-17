@@ -1,7 +1,7 @@
 package poc.arkham.treatment.domain.impl.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.apache.commons.lang.math.IntRange;
+import poc.arkham.common.util.PartialResult;
 import poc.arkham.treatment.domain.model.Inmate;
 
 import java.util.Optional;
@@ -12,7 +12,7 @@ public interface InmateRepository {
 
     Inmate save(Inmate inmate);
 
-    Page<Inmate> find(Pageable pageable);
+    PartialResult<Inmate> find(IntRange range);
 
     void deleteAll();
 }

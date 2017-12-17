@@ -1,2 +1,6 @@
 
 apply plugin: "java"
+
+dependencies {
+    compile "commons-lang:commons-lang:${versions.apacheCommonsLang}"
+}

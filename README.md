@@ -38,6 +38,11 @@ Yet to come:
 * discover the api through the browser
 * add a sort of task engine to rerun failed tasks (spring integration ?)
 * check visual non regression like this: https://medium.com/friday-people/how-we-do-visual-regression-testing-af63fa8b8eb1
+* dynamic configuration with zookeeper
+* async strategies
+  * back pressure (when the broker is full, sync message, when the consumer is full, async message)
+  * poison message
+ 
 
 Resource:
 https://spring.io/guides/tutorials/bookmarks/

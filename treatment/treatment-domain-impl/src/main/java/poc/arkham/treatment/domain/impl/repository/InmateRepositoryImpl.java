@@ -1,5 +1,6 @@
 package poc.arkham.treatment.domain.impl.repository;
 
+import org.apache.commons.lang.math.IntRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -8,6 +9,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import poc.arkham.common.util.PartialResult;
 import poc.arkham.treatment.domain.model.Inmate;
 
 import java.util.List;
@@ -33,11 +35,12 @@ class InmateRepositoryImpl implements InmateRepository {
     }
 
     @Override
-    public Page<Inmate> find(Pageable pageable) {
+    public PartialResult<Inmate> find(IntRange range) {
         final Query query = new Query();
         long count = mongoOperations.count(query, Inmate.class);
-        final List<Inmate> results = mongoOperations.find(query.with(pageable), Inmate.class);
-        return new PageImpl<>(results, pageable, count);
+        final List<Inmate> results = mongoOperations.find(query.skip(range.getMinimumInteger())
+                .limit(range.toArray().length), Inmate.class);
+        return new PartialResult(results, range, Long.valueOf(count).intValue());
     }
 
     @Override

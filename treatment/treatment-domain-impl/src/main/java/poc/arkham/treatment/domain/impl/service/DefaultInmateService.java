@@ -1,10 +1,10 @@
 package poc.arkham.treatment.domain.impl.service;
 
+import org.apache.commons.lang.math.IntRange;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import poc.arkham.common.util.PartialResult;
 import poc.arkham.treatment.domain.exception.InmateNotFoundException;
 import poc.arkham.treatment.domain.exception.InvalidStateException;
 import poc.arkham.treatment.domain.impl.repository.InmateRepository;
@@ -33,8 +33,8 @@ class DefaultInmateService implements InmateService {
     }
 
     @Override
-    public Page<Inmate> find(Pageable pageable) {
-        return inmateRepository.find(pageable);
+    public PartialResult<Inmate> find(IntRange range) {
+        return inmateRepository.find(range);
     }
 
     @Override

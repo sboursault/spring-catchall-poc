@@ -35,4 +35,10 @@ public class RestPreconditions {
         }
     }
 
+    public static void validateWithRegex(String field, String value, String regex) {
+        validateNotNull(value, field);
+        if (!value.matches(regex)) {
+            throw new HttpMessageNotReadableException(field + " must match " + regex);
+        }
+    }
 }

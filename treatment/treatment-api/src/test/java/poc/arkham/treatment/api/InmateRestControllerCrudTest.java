@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureRestDocs(outputDir = "build/snippets/inmates")
-public class InmateRestControllerTest extends AbstractRestControllerTest {
+public class InmateRestControllerCrudTest extends AbstractRestControllerTest {
 
     @Autowired
     private InmateRepository repository;
@@ -37,43 +37,6 @@ public class InmateRestControllerTest extends AbstractRestControllerTest {
     public void setUp() {
         repository.deleteAll();
     }
-
-    @Test
-    public void find_all() throws Exception {
-
-        repository.save(InmateExamples.thePenguin().id("penguin").build());
-        repository.save(InmateExamples.theJoker().id("joker").build());
-        repository.save(InmateExamples.poisonIvy().id("poisonIvy").build());
-
-        mockMvc.perform(
-                        get("/inmates"))
-                .andDo(print())
-                .andExpect(
-                        status().isOk())
-                .andExpect(
-                        jsonPath("$._embedded[*].id",
-                                containsInAnyOrder("penguin", "joker", "poisonIvy")));
-    }
-
-    /*@Test
-    public void find_partial() throws Exception {
-
-        repository.save(InmateExamples.thePenguin().id("penguin").build());
-        repository.save(InmateExamples.theJoker().id("joker").build());
-        repository.save(InmateExamples.poisonIvy().id("poisonIvy").build());
-        repository.save(InmateExamples.scarecrow().id("scarecrow").build());
-        repository.save(InmateExamples.mrFreeze().id("mrFreeze").build());
-        repository.save(InmateExamples.madHatter().id("madHatter").build());
-
-        mockMvc.perform(
-                get("/inmates"))
-                .andDo(print())
-                .andExpect(
-                        status().isOk())
-                .andExpect(
-                        jsonPath("$._embedded[*].id",
-                                containsInAnyOrder("penguin", "joker", "poisonIvy")));
-    }*/
 
     @Test
     public void find_one_success() throws Exception {

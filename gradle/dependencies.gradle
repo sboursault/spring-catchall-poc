@@ -4,6 +4,7 @@ ext {
         springCloud : "Edgware.RELEASE",
         springCloudZipkin : "1.3.0.RELEASE",
         springCloudZookeeperDiscovery : "1.2.0.RELEASE",
+        apacheCommonsLang :    "2.6",
         mapstruct  : "1.2.0.CR2",
         swagger :    "2.7.0"
     ]
