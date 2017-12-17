@@ -39,7 +39,7 @@ public class Link {
     }
 
     public static org.springframework.hateoas.Link toInmateCollection() {
-        String href = uriTo(methodOn(InmateRestController.class).findAll());
+        String href = uriTo(methodOn(InmateRestController.class).find(null));
         return new org.springframework.hateoas.Link(href).withRel(REL_COLLECTION);
     }
 

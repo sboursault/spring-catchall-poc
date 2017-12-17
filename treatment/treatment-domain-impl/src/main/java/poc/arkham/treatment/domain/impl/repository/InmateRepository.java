@@ -1,9 +1,9 @@
 package poc.arkham.treatment.domain.impl.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import poc.arkham.treatment.domain.model.Inmate;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface InmateRepository {
@@ -12,7 +12,7 @@ public interface InmateRepository {
 
     Inmate save(Inmate inmate);
 
-    List<Inmate> findAll();
+    Page<Inmate> find(Pageable pageable);
 
     void deleteAll();
 }

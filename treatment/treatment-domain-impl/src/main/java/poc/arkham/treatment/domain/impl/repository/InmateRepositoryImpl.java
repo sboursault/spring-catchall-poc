@@ -1,6 +1,9 @@
 package poc.arkham.treatment.domain.impl.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -30,8 +33,11 @@ class InmateRepositoryImpl implements InmateRepository {
     }
 
     @Override
-    public List<Inmate> findAll() {
-        return mongoOperations.findAll(Inmate.class);
+    public Page<Inmate> find(Pageable pageable) {
+        final Query query = new Query();
+        long count = mongoOperations.count(query, Inmate.class);
+        final List<Inmate> results = mongoOperations.find(query.with(pageable), Inmate.class);
+        return new PageImpl<>(results, pageable, count);
     }
 
     @Override

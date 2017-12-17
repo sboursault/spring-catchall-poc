@@ -3,8 +3,6 @@ package poc.arkham.treatment.api;
 
 
 import com.google.common.collect.Lists;
-import poc.arkham.treatment.domain.model.Aka;
-import poc.arkham.treatment.domain.impl.repository.InmateRepository;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,8 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import poc.arkham.treatment.domain.impl.repository.InmateRepository;
+import poc.arkham.treatment.domain.model.Aka;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,9 +41,9 @@ public class InmateRestControllerTest extends AbstractRestControllerTest {
     @Test
     public void find_all() throws Exception {
 
-        repository.save(InmateExamples.thePenguin().id("penguin_1234").build());
-        repository.save(InmateExamples.theJoker().id("joker_5555").build());
-        repository.save(InmateExamples.poisonIvy().id("poisonIvy_7777").build());
+        repository.save(InmateExamples.thePenguin().id("penguin").build());
+        repository.save(InmateExamples.theJoker().id("joker").build());
+        repository.save(InmateExamples.poisonIvy().id("poisonIvy").build());
 
         mockMvc.perform(
                         get("/inmates"))
@@ -47,8 +52,28 @@ public class InmateRestControllerTest extends AbstractRestControllerTest {
                         status().isOk())
                 .andExpect(
                         jsonPath("$._embedded[*].id",
-                                containsInAnyOrder("penguin_1234", "joker_5555", "poisonIvy_7777")));
+                                containsInAnyOrder("penguin", "joker", "poisonIvy")));
     }
+
+    /*@Test
+    public void find_partial() throws Exception {
+
+        repository.save(InmateExamples.thePenguin().id("penguin").build());
+        repository.save(InmateExamples.theJoker().id("joker").build());
+        repository.save(InmateExamples.poisonIvy().id("poisonIvy").build());
+        repository.save(InmateExamples.scarecrow().id("scarecrow").build());
+        repository.save(InmateExamples.mrFreeze().id("mrFreeze").build());
+        repository.save(InmateExamples.madHatter().id("madHatter").build());
+
+        mockMvc.perform(
+                get("/inmates"))
+                .andDo(print())
+                .andExpect(
+                        status().isOk())
+                .andExpect(
+                        jsonPath("$._embedded[*].id",
+                                containsInAnyOrder("penguin", "joker", "poisonIvy")));
+    }*/
 
     @Test
     public void find_one_success() throws Exception {
