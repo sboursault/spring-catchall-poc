@@ -1,0 +1,22 @@
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${versions.springBoot}")
+	}
+}
+
+apply plugin: "java"
+apply plugin: "org.springframework.boot"
+
+bootRepackage.enabled = false
+
+dependencies {
+	compile project(':research:research-domain')
+
+	compile('org.springframework.boot:spring-boot-starter-amqp')
+
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+}

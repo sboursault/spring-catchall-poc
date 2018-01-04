@@ -2,6 +2,7 @@ spring:
 
   application:
     name: treatment-api
+    base-url: http://localhost
 
   cloud:
       zookeeper:
@@ -13,12 +14,16 @@ spring:
     mongodb:
       uri: mongodb://asylumdb:27017/test
 
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
   zipkin:
     baseUrl: http://zipkin:9411/
     # to use service discovery, change value to "http://zipkinserver/"
-
-treatment-api:
-  base-url: http://localhost/
 
 logging:
   level:

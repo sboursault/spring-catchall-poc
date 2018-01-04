@@ -22,6 +22,7 @@ featuring:
 * tracing with correlation to aggregate the logs for a single transaction
 * service discovery with zookeeper
 * client side load balancing with ribbon and spring-retry
+* async messages with rabbitMQ
 
 Yet to come: 
 * uri and model versionning

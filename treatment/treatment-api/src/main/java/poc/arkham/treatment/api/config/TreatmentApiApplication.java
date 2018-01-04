@@ -3,6 +3,9 @@ package poc.arkham.treatment.api.config;
 import com.google.common.collect.Lists;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import poc.arkham.common.apiserver.config.SwaggerConfig;
+import poc.arkham.common.webanalytics.config.EnableArkhamAnalytics;
 import poc.arkham.treatment.domain.service.InmateService;
 import poc.arkham.treatment.domain.model.Aka;
 import poc.arkham.treatment.domain.model.Inmate;
@@ -18,13 +21,14 @@ import java.time.LocalDate;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@ComponentScan({"poc.arkham.common", "poc.arkham.treatment"})
+@EnableArkhamAnalytics
+@Import({SwaggerConfig.class})
+@ComponentScan({"poc.arkham.common.web", "poc.arkham.treatment"})
 public class TreatmentApiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TreatmentApiApplication.class, args);
     }
-
 
     @Bean
     CommandLineRunner init(InmateService inmateService) {

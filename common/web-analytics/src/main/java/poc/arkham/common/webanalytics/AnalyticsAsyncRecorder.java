@@ -3,22 +3,22 @@ package poc.arkham.common.webanalytics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-@Component
-class AnalyticsAsyncRecorder {
+public class AnalyticsAsyncRecorder {
 
     private static final Logger LOG = LoggerFactory.getLogger(AnalyticsAsyncRecorder.class);
 
-    @Autowired
     private StringRedisTemplate strRedisTemplate;
+
+    public AnalyticsAsyncRecorder(StringRedisTemplate strRedisTemplate) {
+        this.strRedisTemplate = strRedisTemplate;
+    }
 
     @Async(/* "specificThreadPoolTaskExecutor" */)
         // the default executor is a SimpleAsyncTaskExecutor

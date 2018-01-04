@@ -12,7 +12,6 @@ import java.util.List;
 
 /*
  * Resource representing an inmate.
- * Also provides links related to the inmate.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -27,7 +26,7 @@ public class InmateResource extends ResourceSupport {
 
 	@ApiModelProperty(example = "abcd1234", position = 0)
 	@JsonProperty("id")
-	private String inmateId;
+	private String inmateId; // the id was added as an exercise, in practice we should use the relation link "self"
 
 	@ApiModelProperty(example = "Jonathan", required = true, position = 1)
 	private String firstname;

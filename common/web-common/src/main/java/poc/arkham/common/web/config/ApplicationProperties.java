@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties("treatment-api")
+@ConfigurationProperties("spring.application")
 public class ApplicationProperties {
 
     private String baseUrl;

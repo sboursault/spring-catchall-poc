@@ -12,12 +12,6 @@ services:
     #- "/host/path:/docker/path"
     - "./ext/nginx/default.conf:/etc/nginx/conf.d/default.conf"
 
-  zookeeper:
-    image: "zookeeper:3.4"
-    restart: always
-    ports:
-      - 2181:2181
-
   front-office:
     build: ./ext/spring-boot
     volumes:
@@ -27,20 +21,34 @@ services:
     - "8005:8000" # remote debug
     links:
     - "zookeeper"
-    - "treatment-api"
 
   treatment-api:
     build: ./ext/spring-boot
     volumes:
     - "./treatment/treatment-api/build/libs/treatment-api-0.0.1-SNAPSHOT.jar:/app.jar"
     ports:
-    - "8080"
+    - "8080:8080"
     #- "8000:8000" # remote debug
     links:
     - "zookeeper"
+    - "rabbitmq"
     - "db:asylumdb" # db service will be reachable with hosts "db" and "asylumdb"
     environment:
-    - "TREATMENT_API_BASE_URL=http://localhost/api" # overload application propertry "app.base-url"
+    - "SPRING_APPLICATION_BASE_URL=http://localhost/api" # overload application propertry "spring.application.base-url"
+
+  research-api:
+    build: ./ext/spring-boot
+    volumes:
+    - "./research/research-api/build/libs/research-api-0.0.1-SNAPSHOT.jar:/app.jar"
+    ports:
+    - "8081:8080"
+    #- "8000:8000" # remote debug
+    links:
+    - "zookeeper"
+    - "rabbitmq"
+    environment:
+    - "SPRING_APPLICATION_BASE_URL=http://localhost:8081" # overload application propertry "spring.application.base-url"
+
 
   #logistic-api:
   #  build: ./etc/spring-boot
@@ -69,6 +77,12 @@ services:
   #  environment:
   #  - "REDIS_HOSTS=local:redis:6379"
 
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672" # administration
+
   #elasticsearch:
   #  image: "elasticsearch:5.6"
   #  ports:
@@ -89,11 +103,19 @@ services:
   #  volumes:
   #  - ./ext/logstash:/etc/logstash/conf.d
   #  command: logstash -f /etc/logstash/conf.d/logstash.conf
+
   zipkin:
     image: openzipkin/zipkin
     ports:
     - "9411:9411"
+    environment:
+    - "JAVA_OPTS=-Djava.security.egd=file:/dev/./urandom -Xmx64m" # limit heap size
 
+  zookeeper:
+    image: "zookeeper:3.4"
+    restart: always
+    ports:
+      - 2181:2181
 
   #zookeeper-web:
   #  image: elkozmon/zoonavigator-web:latest

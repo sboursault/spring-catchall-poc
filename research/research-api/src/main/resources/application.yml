@@ -1,0 +1,24 @@
+spring:
+
+  application:
+    name: research-api
+    base-url: http://localhost
+
+  cloud:
+      zookeeper:
+        connect-string: zookeeper:2181
+        discovery:
+          enabled: true
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
+  zipkin:
+    baseUrl: http://zipkin:9411/
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG

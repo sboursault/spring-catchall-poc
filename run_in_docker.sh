@@ -27,7 +27,7 @@ done
 shift $((OPTIND-1)) # shift all processed options away from parameters (keep only operands)
 SERVICES=$*
 
-if [[ " $@ " =~ " api " ]] || [[ " $@ " =~ " front-office " ]] || [ $# = 0 ]; then
+if [[ " $@ " =~ "-api" ]] || [[ " $@ " =~ "front-office" ]] || [ $# = 0 ]; then
   echo ""
   echo "===[ building app ]==="
   echo ""
@@ -38,7 +38,7 @@ if [ $# = 0 ]; then
   echo ""
   echo "===[ up dockers ]==="
   echo ""
-  (set -x; docker-compose up -d --build)
+  (set -x; docker-compose down && docker-compose up -d --build)
 else
   echo ""
   echo "===[ restart dockers ]==="

@@ -8,6 +8,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  */
 @SpringBootConfiguration
 @EnableMongoRepositories(basePackages="poc.arkham.treatment.domain.impl.repository")
-public class TreatmentDomainApplication {
+public class TreatmentDomainApplication { // TODO rename to *Configuration
 
 }

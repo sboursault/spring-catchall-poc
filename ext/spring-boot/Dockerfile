@@ -1,26 +1,20 @@
 
-# --- building the jar using with a staged build ---
-#FROM gradle:4.0.1-jdk8-alpine AS gradleContainer
-#USER root
-#COPY $HOME/.gradle /home/gradle/.gradle
-##ENV GRADLE_USER_HOME /home/gradle/.gradle
-#ADD . /app
-#WORKDIR /app
-#RUN gradle clean build --stacktrace
-
 FROM openjdk:8-jdk-alpine
 
 VOLUME /tmp
-#ADD inmate/inmate-api/build/libs/inmate-api-0.0.1-SNAPSHOT.jar app.jar
-# the jar versions should be externalized
+
+# We added a VOLUME pointing to "/tmp" because that is where a Spring Boot application creates working directories for Tomcat by default.
+# The effect is to create a temporary file on your host under "/var/lib/docker" and link it to the container under "/tmp".
+# This step is optional for the simple app that we wrote here, but can be necessary for other Spring Boot applications if they need to actually write in the filesystem.
+#(from https://spring.io/guides/gs/spring-boot-docker)
+
+ENV JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom -Xmx128m"
+# spring boot applications allocate more than 500M for heap. 128M sounds reasonable for dev.
+# java.security.egd is set to reduce startup time (faster but less secured).
 
 ENV JAVA_DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
-ENV JAVA_OPTS=$JAVA_DEBUG_OPTS
+
 ENV SPRING_PROFILES_ACTIVE="none"
 
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS $JAVA_DEBUG_OPTS -jar /app.jar --spring.profiles.active=$SPRING_PROFILES_ACTIVE" ]
 
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar --spring.profiles.active=$SPRING_PROFILES_ACTIVE" ]
-
-#We added a VOLUME pointing to "/tmp" because that is where a Spring Boot application creates working directories for Tomcat by default. The effect is to create a temporary file on your host under "/var/lib/docker" and link it to the container under "/tmp". This step is optional for the simple app that we wrote here, but can be necessary for other Spring Boot applications if they need to actually write in the filesystem.
-#To reduce Tomcat startup time we added a system property pointing to "/dev/urandom" as a source of entropy.
-#(from https://spring.io/guides/gs/spring-boot-docker)

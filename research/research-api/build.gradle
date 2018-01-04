@@ -1,0 +1,47 @@
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${versions.springBoot}")
+	}
+}
+
+plugins {
+	id "net.ltgt.apt" version "0.12" // needed by the map struct processor
+}
+
+apply plugin: "java"
+apply plugin: "org.springframework.boot"
+apply plugin: 'idea' // adds generated sources to classpath
+
+dependencies {
+
+	apt ("org.mapstruct:mapstruct-processor:${versions.mapstruct}")
+
+	compile project(':research:research-api-resource')
+	compile project(':research:research-domain')
+	compile project(':common:api-server')
+
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	testImplementation project(':research:research-domain-impl')
+
+	runtime project(':research:research-domain-impl')
+	runtime project(':research:research-amqp-adapter')
+
+	compile 'org.springframework.cloud:spring-cloud-starter-zookeeper-discovery'
+
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
+	}
+}
+
+idea {
+	module {
+		sourceDirs += file('build/generated/source')
+	}
+}
