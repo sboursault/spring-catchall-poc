@@ -3,6 +3,7 @@ package poc.arkham.treatment.api.resource;
 import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 
 import java.net.URI;
@@ -47,4 +48,10 @@ public class InmateResource extends ResourceSupport {
 		return link == null ? null : URI.create(link.getHref());
 	}
 
+	// TODO move somewhere else
+	@JsonIgnore
+	public InmateResource withLink(Link link) {
+		super.add(link);
+		return this;
+	}
 }

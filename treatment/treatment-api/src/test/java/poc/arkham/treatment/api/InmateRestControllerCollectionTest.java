@@ -10,8 +10,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import poc.arkham.treatment.domain.impl.repository.InmateRepository;
 import poc.arkham.treatment.domain.model.Inmate;
 
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -49,8 +51,21 @@ public class InmateRestControllerCollectionTest extends AbstractRestControllerTe
                 .andExpect(
                         header().string("Accept-Range", "inmates 25"))
                 .andExpect(
+                        jsonPath("$._links.collection.href", is("http://localhost/v1/inmates")))
+                .andExpect(
+                        jsonPath("$._links.first").doesNotExist())
+                .andExpect(
+                        jsonPath("$._links.prev").doesNotExist())
+                .andExpect(
+                        jsonPath("$._links.next").doesNotExist())
+                .andExpect(
+                        jsonPath("$._links.last").doesNotExist())
+                .andExpect(
                         jsonPath("$._embedded[*].id",
-                                containsInAnyOrder("penguin", "joker", "poisonIvy")));
+                                containsInAnyOrder("penguin", "joker", "poisonIvy")))
+                .andExpect(
+                        jsonPath("$._embedded[?(@.id == 'joker')]._links.self.href",
+                                contains("http://localhost/v1/inmates/joker")));
     }
 
     @Test
@@ -70,8 +85,20 @@ public class InmateRestControllerCollectionTest extends AbstractRestControllerTe
                 .andExpect(
                         header().string("Accept-Range", "inmates 25"))
                 .andExpect(
+                        jsonPath("$._links.collection.href", is("http://localhost/v1/inmates")))
+                .andExpect(
+                        jsonPath("$._links.first.href", is("http://localhost/v1/inmates?range=0-3")))
+                .andExpect(
+                        jsonPath("$._links.prev.href", is("http://localhost/v1/inmates?range=-1-2")))
+                .andExpect(
+                        jsonPath("$._links.next.href", is("http://localhost/v1/inmates?range=7-10")))
+                .andExpect(
+                        jsonPath("$._links.last.href", is("http://localhost/v1/inmates?range=30-33")))
+                .andExpect(
                         jsonPath("$._embedded[*].id",
-                                containsInAnyOrder("inmate_3", "inmate_4", "inmate_5", "inmate_6")));
+                                containsInAnyOrder("inmate_3", "inmate_4", "inmate_5", "inmate_6")))
+                .andExpect(
+                        jsonPath("$._links.start.href", is("http://localhost/")));
     }
 
     @Test

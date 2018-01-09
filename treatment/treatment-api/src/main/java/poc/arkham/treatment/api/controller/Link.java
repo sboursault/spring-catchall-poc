@@ -1,16 +1,17 @@
 package poc.arkham.treatment.api.controller;
 
+import org.apache.commons.lang.math.IntRange;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.util.UriComponentsBuilder;
 import poc.arkham.common.web.config.ApplicationProperties;
 import poc.arkham.treatment.domain.exception.InmateNotFoundException;
-import org.springframework.hateoas.core.AnnotationMappingDiscoverer;
-import org.springframework.hateoas.core.DummyInvocationUtils;
-import org.springframework.hateoas.core.MappingDiscoverer;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import static poc.arkham.common.web.config.ApplicationContextProvider.getApplicationContext;
+import java.util.Optional;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static poc.arkham.common.web.config.ApplicationContextProvider.getApplicationContext;
 
 /**
  * Factory class to create inmate links.
@@ -20,18 +21,17 @@ public class Link {
     private static final String REL_START = "start";
     private static final String REL_COLLECTION = "collection";
 
-    private static final MappingDiscoverer DISCOVERER = new AnnotationMappingDiscoverer(RequestMapping.class);
-
+    // TODO add a templated link
 
     public static org.springframework.hateoas.Link toStart() {
-        String href = uriTo(methodOn(RootRestController.class).start());
-        return new org.springframework.hateoas.Link(href).withRel(REL_START);
+        return newLinkTo(methodOn(RootRestController.class).start())
+                .withRel(REL_START);
     }
 
     public static org.springframework.hateoas.Link toInmate(String id) {
         try {
-            String href = uriTo(methodOn(InmateRestController.class).findById(id), id);
-            return new org.springframework.hateoas.Link(href).withSelfRel();
+            return newLinkTo(methodOn(InmateRestController.class).findById(id))
+                    .withSelfRel();
         } catch (InmateNotFoundException e) {
             // can't happen: a dummy InmateRestController is used
             throw new RuntimeException(e);
@@ -39,20 +39,29 @@ public class Link {
     }
 
     public static org.springframework.hateoas.Link toInmateCollection() {
-        String href = uriTo(methodOn(InmateRestController.class).find(null));
-        return new org.springframework.hateoas.Link(href).withRel(REL_COLLECTION);
+        return toInmateCollection(Optional.empty());
     }
 
-    private static String uriTo(Object method, Object... pathParams) {
-        return UriComponentsBuilder.fromHttpUrl(getBasePath()).path(mappingTo(method)).buildAndExpand(pathParams).toUriString();
+    public static org.springframework.hateoas.Link toInmateCollection(Optional<IntRange> range) {
+        LinkedMultiValueMap parameters = new LinkedMultiValueMap();
+        if (range.isPresent()) {
+            parameters.add("range", range.get().getMinimumInteger() + "-" + range.get().getMaximumInteger());
+        }
+        return newLinkTo(methodOn(InmateRestController.class).find(null), parameters)
+                .withRel(REL_COLLECTION);
     }
 
-    private static String mappingTo(Object invocationValue) {
-        // picked from org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo(java.lang.Object)
-        Assert.isInstanceOf(DummyInvocationUtils.LastInvocationAware.class, invocationValue);
-        DummyInvocationUtils.LastInvocationAware invocations = (DummyInvocationUtils.LastInvocationAware) invocationValue;
-        DummyInvocationUtils.MethodInvocation invocation = invocations.getLastInvocation();
-        return DISCOVERER.getMapping(invocation.getTargetType(), invocation.getMethod());
+    private static org.springframework.hateoas.Link newLinkTo(Object method) {
+        return newLinkTo(method, new LinkedMultiValueMap());
+    }
+
+    private static org.springframework.hateoas.Link newLinkTo(Object method, MultiValueMap<String, String> parameters) {
+        final String uri = linkTo(method).toUri().getPath();
+        String url = UriComponentsBuilder.fromHttpUrl(getBasePath())
+                .path(uri)
+                .queryParams(parameters)
+                .toUriString();
+        return new org.springframework.hateoas.Link(url);
     }
 
     private static String getBasePath() {

@@ -14,22 +14,20 @@ import org.springframework.web.bind.annotation.RestController;
 import poc.arkham.common.apiserver.util.ResponseEnityFactory;
 import poc.arkham.common.util.PartialResult;
 import poc.arkham.common.web.util.RangeQueryParameter;
+import poc.arkham.treatment.api.assembler.InmateResultResourceAssembler;
+import poc.arkham.treatment.api.assembler.InmateResourceAssembler;
 import poc.arkham.treatment.api.mapper.InmateMapper;
 import poc.arkham.treatment.api.resource.InmateResource;
-import poc.arkham.treatment.api.resource.InmatesResource;
 import poc.arkham.treatment.domain.exception.InmateNotFoundException;
 import poc.arkham.treatment.domain.exception.InvalidStateException;
 import poc.arkham.treatment.domain.model.Inmate;
 import poc.arkham.treatment.domain.service.InmateService;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static poc.arkham.common.web.util.RestPreconditions.validate;
 import static poc.arkham.common.web.util.RestPreconditions.validateNotNull;
 import static poc.arkham.common.web.util.RestPreconditions.validateNull;
-import static poc.arkham.treatment.api.resource.InmatesResource.InmatesResourceBuilder.newInmatesResource;
 
 /**
  * <p>A simple rest controller to expose inmates.</p>
@@ -44,19 +42,25 @@ public class InmateRestController {
     @Autowired
     private InmateService inmateService;
 
+    @Autowired
+    private InmateResourceAssembler inmateResourceAssembler;
+
+    @Autowired
+    private InmateResultResourceAssembler inmateResultResourceAssembler;
+
     @GetMapping
     public ResponseEntity find(
             @RequestParam(name = "range", required = false, defaultValue = "0-19")
             RangeQueryParameter rangeQuery) {
         validate(rangeQuery.getSize() <= MAXIMUM_RANGE_SIZE, "Requested range is too big");
-        PartialResult<Inmate> results = inmateService.find(rangeQuery.getValue());
-        return ResponseEnityFactory.collection(results, RESOURCE, MAXIMUM_RANGE_SIZE)
-                .body(convertToResourceList(results));
+        PartialResult<Inmate> result = inmateService.find(rangeQuery.getValue());
+        return ResponseEnityFactory.collection(result, RESOURCE, MAXIMUM_RANGE_SIZE)
+                .body(inmateResultResourceAssembler.toResource(result));
     }
 
     @GetMapping(path = "/{id}")
     public InmateResource findById(@PathVariable("id") String id) throws InmateNotFoundException {
-        return convertToResource(inmateService.findById(id));
+        return inmateResourceAssembler.toResource(inmateService.findById(id));
     }
 
     @PostMapping
@@ -64,7 +68,7 @@ public class InmateRestController {
         Inmate entity = convertToModel(input);
         validateNull(entity.getId(), "id");
         Inmate persisted = inmateService.register(entity);
-        InmateResource response = convertToResource(persisted);
+        InmateResource response = inmateResourceAssembler.toResource(persisted);
         return ResponseEntity
                 .created(response.getUri())
                 .body(response);
@@ -82,7 +86,7 @@ public class InmateRestController {
         validateNotNull(entity.getId(), "id");
         validateInmateExists(id); // TODO: could be in the service
         Inmate persisted = inmateService.register(entity);
-        return convertToResource(persisted);
+        return inmateResourceAssembler.toResource(persisted);
     }
 
     // helpers
@@ -91,29 +95,8 @@ public class InmateRestController {
         inmateService.findById(id);
     }
 
-    private InmateResource convertToResource(Inmate source) {
-        InmateResource target = InmateMapper.INSTANCE.map(source);
-        target.add(Link.toInmate(source.getId()));
-        target.add(Link.toInmateCollection());
-        target.add(Link.toStart());
-        return target;
-    }
-
     private Inmate convertToModel(InmateResource source) {
         return InmateMapper.INSTANCE.map(source);
-    }
-
-    private InmatesResource convertToResourceList(PartialResult<Inmate> source) {
-        List<InmateResource> resources = source.getContent().stream()
-                .map(InmateMapper.INSTANCE::map)
-                .collect(Collectors.toList());
-        resources.forEach(it -> it.add(Link.toInmate(it.getInmateId())));
-        return newInmatesResource()
-                .results(resources)
-                .with(
-                        Link.toInmateCollection(),
-                        Link.toStart())
-                .build();
     }
 
 }

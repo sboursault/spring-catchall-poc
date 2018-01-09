@@ -9,7 +9,7 @@ featuring:
   * error handling,
   * forward compatible design (see Inmate.aka),
   * handling date fields
-  * service discovery with HATEOAS principles,
+  * service discovery with HATEOAS (handle links prev, next, first, last, self, etc.)
   * a swagger-ui client,
   * a spring rest docs documentation
   * internal and external representations defined in separate classes, mapping realized by mapstruct 
@@ -25,6 +25,7 @@ featuring:
 * async messages with rabbitMQ
 
 Yet to come: 
+* monitoring with grafana to inspect behaviors under load tests 
 * uri and model versionning
 * improved hateoas discoverability
 * decouple storage representation from the one exposed
