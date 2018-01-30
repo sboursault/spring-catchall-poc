@@ -26,6 +26,7 @@ services:
     build: ./ext/spring-boot
     volumes:
     - "./treatment/treatment-api/build/libs/treatment-api-0.0.1-SNAPSHOT.jar:/app.jar"
+    #- "./ext/spring-boot/inspectit-agent/inspectit-agent.jar:/inspectit-agent.jar"
     ports:
     - "8080:80"
     #- "8000:8000" # remote debug
@@ -34,13 +35,13 @@ services:
     - "rabbitmq"
     - "db:asylumdb" # db service will be reachable with hosts "db" and "asylumdb"
     environment:
-    - "SPRING_APPLICATION_BASE_URL=http://localhost/api" # overload application propertry "spring.application.base-url"
+    - "SPRING_APPLICATION_BASE_URL=http://localhost:8080" # overload application propertry "spring.application.base-url"
+    #command: "-javaagent:/inspectit-agent.jar -Dinspectit.repository=inspectit-cmr:9070 -Dinspectit.agent.name=treatment-api"
 
   research-api:
     build: ./ext/spring-boot
     volumes:
     - "./research/research-api/build/libs/research-api-0.0.1-SNAPSHOT.jar:/app.jar"
-    #- "./ext/spring-boot/inspectit-agent/inspectit-agent.jar:/inspectit-agent.jar"
     ports:
     - "8081:80"
     #- "8000:8000" # remote debug
@@ -49,7 +50,7 @@ services:
     - "rabbitmq"
     environment:
     - "SPRING_APPLICATION_BASE_URL=http://localhost:8081" # overload application propertry "spring.application.base-url"
-    #- "JAVA_AGENT=-javaagent:/inspectit-agent.jar -Dinspectit.repository=inspectit-cmr:9070 -Dinspectit.agent.name=research-api"
+
 
     # test agent with this c:d : java -javaagent:/inspectit-agent.jar -Dinspectit.repository=inspectit-cmr:9070 -Dinspectit.agent.name=testtest -version
 
@@ -137,11 +138,11 @@ services:
   #    SERVER_HTTP_PORT: 9000
   #  restart: always
 
-  #inspectit-cmr:
-  #  image: inspectit/cmr:1.8.5.101
-  #  ports:
-  #  - "8182:8182"
-  #  - "9070:9070" # communication with the agent
-  #  environment:
-  #  - "BUFFER_SIZE=500" # memory buffer (default is 1500M, must not be larger than the available memory)
+  inspectit-cmr:
+    image: inspectit/cmr:1.8.5.101
+    ports:
+    - "8182:8182"
+    - "9070:9070" # communication with the agent
+    environment:
+    - "BUFFER_SIZE=500" # memory buffer (default is 1500M, must not be larger than the available memory)
 
