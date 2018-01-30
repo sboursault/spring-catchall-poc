@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -13,15 +14,19 @@ import java.util.List;
  */
 public class InmateResultResource extends ResourceSupport {
 
-	private List<InmateResource> results;
+	private final List<InmateResource> results = new ArrayList<>();
 
 	@JsonProperty("_embedded")
 	public List<InmateResource> getResults() {
 		return results;
 	}
 
+    public InmateResultResource() {
+        // empty constructor required by com.fasterxml.jackson to deserialize json payload
+    }
+
     public InmateResultResource(List<InmateResource> results) {
-        this.results = results;
+	    this.results.addAll(results);
     }
 
     // TODO move somewhere else

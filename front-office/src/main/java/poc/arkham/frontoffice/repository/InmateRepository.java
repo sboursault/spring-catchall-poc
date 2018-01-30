@@ -12,7 +12,7 @@ public class InmateRepository {
     private RestTemplate restTemplate;
 
     public InmateResultResource findAll() {
-        return restTemplate.getForObject("http://treatment-api/inmates", InmateResultResource.class);
+        return restTemplate.getForObject("http://treatment-api/v1/inmates", InmateResultResource.class);
     }
 
 }

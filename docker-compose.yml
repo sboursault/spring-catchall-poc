@@ -17,7 +17,7 @@ services:
     volumes:
     - "./front-office/build/libs/front-office-0.0.1-SNAPSHOT.jar:/app.jar"
     ports:
-    - "8085:8080"
+    - "8085:80"
     - "8005:8000" # remote debug
     links:
     - "zookeeper"
@@ -27,7 +27,7 @@ services:
     volumes:
     - "./treatment/treatment-api/build/libs/treatment-api-0.0.1-SNAPSHOT.jar:/app.jar"
     ports:
-    - "8080:8080"
+    - "8080:80"
     #- "8000:8000" # remote debug
     links:
     - "zookeeper"
@@ -40,20 +40,24 @@ services:
     build: ./ext/spring-boot
     volumes:
     - "./research/research-api/build/libs/research-api-0.0.1-SNAPSHOT.jar:/app.jar"
+    #- "./ext/spring-boot/inspectit-agent/inspectit-agent.jar:/inspectit-agent.jar"
     ports:
-    - "8081:8080"
+    - "8081:80"
     #- "8000:8000" # remote debug
     links:
     - "zookeeper"
     - "rabbitmq"
     environment:
     - "SPRING_APPLICATION_BASE_URL=http://localhost:8081" # overload application propertry "spring.application.base-url"
+    #- "JAVA_AGENT=-javaagent:/inspectit-agent.jar -Dinspectit.repository=inspectit-cmr:9070 -Dinspectit.agent.name=research-api"
+
+    # test agent with this c:d : java -javaagent:/inspectit-agent.jar -Dinspectit.repository=inspectit-cmr:9070 -Dinspectit.agent.name=testtest -version
 
 
   #logistic-api:
   #  build: ./etc/spring-boot
   #  ports:
-  #  - "8081:8080"
+  #  - "8081:80"
   #  - "8001:8000" # remote debug
   #  links:
   #  - "db:asylumdb" # db service will be reachable with hosts "db" and "asylumdb"
@@ -66,8 +70,8 @@ services:
 
   redis:
     image: "redis:4.0"
-    ports:
-    - "6379:6379"
+    expose:
+    - "6379"
   #redis-commander:
   #  image: "rediscommander/redis-commander:latest"
   #  links:
@@ -132,3 +136,12 @@ services:
   #  environment:
   #    SERVER_HTTP_PORT: 9000
   #  restart: always
+
+  #inspectit-cmr:
+  #  image: inspectit/cmr:1.8.5.101
+  #  ports:
+  #  - "8182:8182"
+  #  - "9070:9070" # communication with the agent
+  #  environment:
+  #  - "BUFFER_SIZE=500" # memory buffer (default is 1500M, must not be larger than the available memory)
+

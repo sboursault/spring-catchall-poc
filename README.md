@@ -25,7 +25,8 @@ featuring:
 * async messages with rabbitMQ
 
 Yet to come: 
-* monitoring with grafana to inspect behaviors under load tests 
+* monitoring with grafana to inspect behaviors under load tests (see also promotheus) 
+* APM monitoring (javamelody, scouter, Pinpoint, inspectIT ?) 
 * uri and model versionning
 * improved hateoas discoverability
 * decouple storage representation from the one exposed

@@ -1,6 +1,10 @@
 
 FROM openjdk:8-jdk-alpine
 
+# can it be in the docker-file ?
+# need to declare the vol + a java agent variable
+#ADD inspectit-agent/inspectit-agent.jar /
+
 VOLUME /tmp
 
 # We added a VOLUME pointing to "/tmp" because that is where a Spring Boot application creates working directories for Tomcat by default.
@@ -16,5 +20,16 @@ ENV JAVA_DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,addre
 
 ENV SPRING_PROFILES_ACTIVE="none"
 
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS $JAVA_DEBUG_OPTS -jar /app.jar --spring.profiles.active=$SPRING_PROFILES_ACTIVE" ]
+ENV JAVA_AGENT=""
+
+# redefine spring-boot server port
+ENV SERVER_PORT=80
+
+# yes use the exec form of entry point
+#ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS $JAVA_DEBUG_OPTS -jar /app.jar --spring.profiles.active=$SPRING_PROFILES_ACTIVE" ]
+ENTRYPOINT [ "java", "-jar", "/app.jar", "$JAVA_OPTS", "$JAVA_DEBUG_OPTS", "--spring.profiles.active=$SPRING_PROFILES_ACTIVE" ]
+
+#CMD java $JAVA_OPTS $JAVA_DEBUG_OPTS $JAVA_AGENT \
+#  -jar /app.jar \
+#  --spring.profiles.active=$SPRING_PROFILES_ACTIVE
 

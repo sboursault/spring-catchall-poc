@@ -15,5 +15,5 @@ bootRepackage.enabled = false
 
 dependencies {
 	compileOnly "org.projectlombok:lombok" // @Data makes sense on resource objects
-	compile project(':common:api-server')
+	compile project(':common:api-server') // TODO Noooooooooo! this module will be on both server and client side.
 }
