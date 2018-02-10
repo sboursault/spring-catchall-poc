@@ -23,19 +23,18 @@ featuring:
 * service discovery with zookeeper
 * client side load balancing with ribbon and spring-retry
 * async messages with rabbitMQ
+* a search engine (using an elasticsearch)
 
 Yet to come: 
 * monitoring with grafana to inspect behaviors under load tests (see also promotheus) 
 * APM monitoring (javamelody, scouter, Pinpoint, inspectIT ?) 
 * uri and model versionning
 * improved hateoas discoverability
-* decouple storage representation from the one exposed
 * access restrictions
 * project versionning and packaging (should include a snapshot dependency)
 * handle PATCH and PUT operations, collection with sort and pagination
 * data import with spring integration
 * https dev environment (https://hub.docker.com/r/marvambass/nginx-ssl-secure/)
-* elastic search index
 * load balancing, shared session storage
 * blue/greeen deployment
 * discover the api through the browser
@@ -45,7 +44,7 @@ Yet to come:
 * async strategies
   * back pressure (when the broker is full, sync message, when the consumer is full, async message)
   * poison message
- 
+* state machine
 
 Resource:
 https://spring.io/guides/tutorials/bookmarks/

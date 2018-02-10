@@ -1,64 +1,34 @@
 package poc.arckham.research.domain.model;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.joda.money.Money;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+
+import java.util.Optional;
+/*
+ * To find meds using the elasticsearch api: curl http://localhost:9200/research/_search?pretty=true
+ */
+@Data
+@Builder(builderMethodName = "newMedicine")
+@NoArgsConstructor
+@AllArgsConstructor
+@Document(indexName = "research", type = "medicines", shards = 1, replicas = 0, refreshInterval = "-1")
 public class Medicine {
 
+    @Id
     private String id;
 
     private String label;
 
-    private MedicineState state;
+    private String description;
 
-    public String getId() {
-        return id;
-    }
+    private MedicineState state; // TODO should change based on actions, see spring state machine
 
-    public String getLabel() {
-        return label;
-    }
+    private Optional<Money> averagePrice;
 
-    public MedicineState getState() {
-        return state;
-    }
-
-    public void setState(MedicineState state) {
-        this.state = state;
-    }
-
-    public static class MedicineBuilder
-    {
-        private Medicine medicine;
-
-        private MedicineBuilder()
-        {
-            medicine = new Medicine();
-        }
-
-        public MedicineBuilder id(String id)
-        {
-            medicine.id = id;
-            return this;
-        }
-
-        public MedicineBuilder label(String label)
-        {
-            medicine.label = label;
-            return this;
-        }
-
-        public MedicineBuilder state(MedicineState state)
-        {
-            medicine.state = state;
-            return this;
-        }
-
-        public static MedicineBuilder newMedicine()
-        {
-            return new MedicineBuilder();
-        }
-
-        public Medicine build()
-        {
-            return medicine;
-        }
-    }
 }

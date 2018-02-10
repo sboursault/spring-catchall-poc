@@ -48,6 +48,7 @@ services:
     links:
     - "zookeeper"
     - "rabbitmq"
+    - "elasticsearch"
     environment:
     - "SPRING_APPLICATION_BASE_URL=http://localhost:8081" # overload application propertry "spring.application.base-url"
 
@@ -88,17 +89,24 @@ services:
       - "5672:5672"
       - "15672:15672" # administration
 
-  #elasticsearch:
-  #  image: "elasticsearch:5.6"
-  #  ports:
-  #  - "9200:9200"
-  #  - "9300:9300"
-  #kibana:
-  #  image: "kibana:5.6"
-  #  ports:
-  #  - "5601:5601"
-  #  links:
-  #  - elasticsearch
+  elasticsearch:
+    # Elasticsearch is a search and analytics engine that makes data easy to explore.
+    image: "elasticsearch:2.4.6"
+    # Spring Data Elasticsearch compatibility matrix: https://github.com/spring-projects/spring-data-elasticsearch/wiki/Spring-Data-Elasticsearch---Spring-Boot---version-matrix
+    environment:
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      # volume
+      # "$PWD/config":/usr/share/elasticsearch/config
+    ports:
+    - "9200:9200" # http calls
+    - "9300:9300" # used by java client
+  kibana:
+    # Kibana gives shape to any kind of data — structured and unstructured — indexed in Elasticsearch.
+    image: "kibana:4.6.4"
+    ports:
+    - "5601:5601"
+    links:
+    - elasticsearch
   #logstash:
   #  image: "logstash:5.6"
   #  ports:

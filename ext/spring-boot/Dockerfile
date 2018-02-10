@@ -13,7 +13,7 @@ VOLUME /tmp
 #(from https://spring.io/guides/gs/spring-boot-docker)
 
 ENV JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom -Xmx128m"
-# spring boot applications allocate more than 500M for heap. 128M sounds reasonable for dev.
+# By default, spring boot apps allocate more than 500M for heap. 128M sounds reasonable for dev.
 # java.security.egd is set to reduce startup time (faster but less secured).
 
 ENV JAVA_DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"

@@ -14,5 +14,15 @@ apply plugin: "org.springframework.boot"
 bootRepackage.enabled = false
 
 dependencies {
+
+	compileOnly("org.projectlombok:lombok")
+
+	compile 'org.joda:joda-money:0.12'
+
+	compile("org.springframework.boot:spring-boot-starter-data-elasticsearch") // required for entity annotations :-/
+
 	compile project(':common:common-util')
+
+	testCompile "junit:junit:4.12"
+	testCompile "org.assertj:assertj-core:3.8.0"
 }

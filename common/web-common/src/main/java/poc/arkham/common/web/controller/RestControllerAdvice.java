@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import poc.arkham.common.web.exception.ResourceNotFoundException;
 import poc.arkham.common.web.resource.ErrorResource;
 
 
@@ -36,6 +37,12 @@ public class RestControllerAdvice {
     public @ResponseBody ErrorResource handleNotReadable(HttpMessageNotReadableException e) {
         Throwable cause = e.getRootCause() != null ? e.getRootCause() : e;
         return new ErrorResource(cause.getMessage());
+    }
+
+    @ExceptionHandler({ResourceNotFoundException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public @ResponseBody ErrorResource handleNotFound(ResourceNotFoundException e) {
+        return new ErrorResource(e.getMessage());
     }
 
 }

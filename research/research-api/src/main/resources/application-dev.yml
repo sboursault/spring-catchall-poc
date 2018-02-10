@@ -1,0 +1,21 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    base-url: http://localhost:8081
+
+  cloud:
+      zookeeper:
+        connect-string: localhost:2181
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+
+  zipkin:
+    baseUrl: http://localhost:9411/
+
+elasticsearch:
+  host: localhost
+  port: 9300

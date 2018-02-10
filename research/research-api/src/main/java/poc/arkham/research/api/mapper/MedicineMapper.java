@@ -6,6 +6,8 @@ import org.mapstruct.factory.Mappers;
 import poc.arckham.research.domain.model.Medicine;
 import poc.arckham.research.domain.model.MedicineState;
 
+import static poc.arckham.research.domain.model.Medicine.newMedicine;
+
 @Mapper
 public interface MedicineMapper {
 
@@ -14,8 +16,9 @@ public interface MedicineMapper {
     MedicineResource map(Medicine source);
 
     default Medicine map(MedicineResource source) {
-        return Medicine.MedicineBuilder.newMedicine()
+        return newMedicine()
                 .label(source.getLabel())
+                .description(source.getDescription())
                 .state(MedicineState.AUTHORIZED_SELLING)
                 .build();
     }

@@ -18,7 +18,7 @@ bootRepackage.enabled = false
 dependencies {
     compile project(':common:web-common')
 
-    compile "org.springframework.boot:spring-boot-starter-hateoas"
+    compile "org.springframework.data:spring-data-commons"
 
     compile ("org.mapstruct:mapstruct-jdk8:${versions.mapstruct}")
 

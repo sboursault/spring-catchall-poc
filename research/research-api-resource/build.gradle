@@ -14,6 +14,6 @@ apply plugin: "org.springframework.boot"
 bootRepackage.enabled = false
 
 dependencies {
-	compileOnly "org.projectlombok:lombok" // @Data makes sense on resource objects
+	compileOnly "org.projectlombok:lombok"
 	compile project(':common:api-server')
 }

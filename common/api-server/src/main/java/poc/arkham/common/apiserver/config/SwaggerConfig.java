@@ -8,6 +8,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import static com.google.common.base.Predicates.or;
 import static springfox.documentation.builders.PathSelectors.any;
 import static springfox.documentation.builders.RequestHandlerSelectors.basePackage;
 
@@ -22,7 +23,12 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
           .host(properties.getBaseUrl().replace("https://", "").replace("http://", ""))
-          .select().apis(basePackage("poc.arkham.treatment.api.controller")).paths(any())
+          .select()
+          .apis(
+              or(
+                  basePackage("poc.arkham.treatment.api.controller"),
+                  basePackage("poc.arkham.research.api.controller")))
+          .paths(any())
           .build();
     }
 

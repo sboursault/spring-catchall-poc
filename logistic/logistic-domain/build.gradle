@@ -15,5 +15,5 @@ bootRepackage.enabled = false
 
 dependencies {
 	compile project(':common:common-util')
-	compile("org.springframework.boot:spring-boot-starter-data-mongodb") // used for annotations :-/
+	compile("org.springframework.boot:spring-boot-starter-data-mongodb") // required for entity annotations :-/
 }
