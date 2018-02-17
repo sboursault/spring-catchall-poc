@@ -31,7 +31,6 @@ public class ResponseEnityFactory {
 
     public static <T> ResponseEntity<ResultResource<T>> collection(Pageable p, Page<T> results, String resource, int maximumRangeSize) {
 
-
         ResultResource<T> body = new ResultResource(results.getContent());
 
         HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
@@ -48,7 +47,7 @@ public class ResponseEnityFactory {
         }
 
         return ResponseEntity
-                .status(results.getSize() <= results.getTotalElements() ? OK : PARTIAL_CONTENT)
+                .status(results.getSize() <= results.getTotalElements() ? PARTIAL_CONTENT : OK)
                 .header("Content-Range", p.getOffset() + "-" + (p.getOffset() + results.getSize() - 1) + "/" + results.getSize())
                 .header("Accept-Range", resource + " " + maximumRangeSize)
                 .body(body);

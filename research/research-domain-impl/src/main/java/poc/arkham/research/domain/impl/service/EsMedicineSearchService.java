@@ -1,6 +1,9 @@
 package poc.arkham.research.domain.impl.service;
 
+import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -21,11 +24,17 @@ public class EsMedicineSearchService implements MedicineSearchService {
 
     @Override
     public Page<Medicine> search(String text, Pageable pageable) {
+        QueryBuilder queryBuilder;
+        if (StringUtils.isEmpty(text)) {
+            queryBuilder = new MatchAllQueryBuilder();
+        } else {
+            queryBuilder = new MultiMatchQueryBuilder(text)
+                    .field("label", 2)
+                    .field("description")
+                    .fuzziness(ONE);
+        }
         NativeSearchQuery query = new NativeSearchQueryBuilder()
-                .withQuery(new MultiMatchQueryBuilder(text)
-                        .field("label", 2)
-                        .field("description")
-                        .fuzziness(ONE))
+                .withQuery(queryBuilder)
                 .withPageable(pageable)
                 .build();
         return operations.queryForPage(query, Medicine.class);

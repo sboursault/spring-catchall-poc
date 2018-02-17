@@ -1,0 +1,13 @@
+spring:
+
+  autoconfigure:
+    # don't exclude ElasticsearchAutoConfiguration to avoid starting a new elasticsearch node
+    exclude: ""
+
+  cloud:
+    zookeeper:
+      enabled: false
+
+elasticsearch:
+  host: localhost
+  port: 9300

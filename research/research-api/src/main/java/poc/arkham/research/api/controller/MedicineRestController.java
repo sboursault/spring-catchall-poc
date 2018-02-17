@@ -26,7 +26,7 @@ import static poc.arkham.common.web.util.RestPreconditions.*;
  * <p>A simple rest controller to expose medicines.</p>
  */
 @RestController
-@RequestMapping("/medicines")
+@RequestMapping("/v1/medicines")
 public class MedicineRestController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MedicineRestController.class);
@@ -60,7 +60,8 @@ public class MedicineRestController {
     // curl -X GET --header 'Accept: application/json' 'http://localhost:8081/medicines?text=aaaa&page=0&size=5' | json_pp
 
     @GetMapping
-    public ResponseEntity<ResultResource<MedicineResource>> search(@RequestParam("text") String text,
+    public ResponseEntity<ResultResource<MedicineResource>> search(
+            @RequestParam(required = false, defaultValue = "") String text,
             @PageableDefault(size = 5, page = 0) Pageable pageable) {
 
         Page<MedicineResource> results = medicineSearchService.search(text, pageable)
